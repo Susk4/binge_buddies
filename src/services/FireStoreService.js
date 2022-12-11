@@ -18,6 +18,7 @@ class FireStoreService {
         email: user.email,
         createdAt: user.metadata.createdAt,
         lastLogin: user.metadata.lastLoginAt,
+        photoUrl: user.photoURL,
       });
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -28,7 +29,8 @@ class FireStoreService {
       const snapShot = await getDocs(collection(this.db, "users"));
       const users = [];
       snapShot.forEach((doc) => {
-        users[doc.id] = doc.data();
+        const user = { uid: doc.id, ...doc.data() };
+        users.push(user);
       });
       return users;
     } catch (e) {
