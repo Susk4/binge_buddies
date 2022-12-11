@@ -1,6 +1,6 @@
 import { useRouter } from "next/dist/client/router";
 import React from "react";
-import useAuth from "../hook/auth";
+import useAuth from "../hook/useAuth";
 
 export default function AppLayout({ children }) {
   const router = useRouter();

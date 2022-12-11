@@ -10,6 +10,7 @@ import {
 class AuthService {
   constructor(firebaseApp) {
     this.auth = getAuth(firebaseApp);
+
   }
 
   waitForUser(callback) {
@@ -19,7 +20,6 @@ class AuthService {
   }
 
   loginWithGoogle() {
-    console.log(navigator.userAgent);
     return signInWithPopup(this.auth, new GoogleAuthProvider())
       .then((userCred) => {
         return {

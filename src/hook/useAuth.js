@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import AuthService from "../service/AuthService";
+import AuthService from "../services/AuthService";
 
 const authContext = createContext();
 
@@ -11,6 +11,11 @@ export function AuthProvider(props) {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
 
+  
+  // Start listing users from the beginning, 1000 at a time.
+  
+  
+
   const loginWithGoogle = async () => {
     const { error, user } = await AuthService.loginWithGoogle();
     setUser(user ?? null);
@@ -21,7 +26,7 @@ export function AuthProvider(props) {
     await AuthService.logout();
     setUser(null);
   };
-  const auth = { user, error, loginWithGoogle, logout, setUser };
+  const auth = { user , error, loginWithGoogle, logout, setUser };
 
   return <authContext.Provider value={auth} {...props} />;
 }
