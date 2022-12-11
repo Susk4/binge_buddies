@@ -10,7 +10,6 @@ import {
 class AuthService {
   constructor(firebaseApp) {
     this.auth = getAuth(firebaseApp);
-
   }
 
   waitForUser(callback) {

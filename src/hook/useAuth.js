@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import AuthService from "../services/AuthService";
+import useFireStore from "./useFireStore";
 
 const authContext = createContext();
 
@@ -10,15 +11,12 @@ export default function useAuth() {
 export function AuthProvider(props) {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
-
-  
-  // Start listing users from the beginning, 1000 at a time.
-  
-  
+  const { addUser,} = useFireStore();
 
   const loginWithGoogle = async () => {
     const { error, user } = await AuthService.loginWithGoogle();
     setUser(user ?? null);
+    addUser(user);
     setError(error ?? "");
   };
 
@@ -26,7 +24,7 @@ export function AuthProvider(props) {
     await AuthService.logout();
     setUser(null);
   };
-  const auth = { user , error, loginWithGoogle, logout, setUser };
+  const auth = { user, error, loginWithGoogle, logout, setUser };
 
   return <authContext.Provider value={auth} {...props} />;
 }
