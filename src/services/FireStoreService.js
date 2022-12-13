@@ -13,7 +13,7 @@ class FireStoreService {
 
   async addUser(user) {
     try {
-      const docRef = await setDoc(doc(this.db, "users", user.uid), {
+      await setDoc(doc(this.db, "users", user.uid), {
         name: user.displayName,
         email: user.email,
         createdAt: user.metadata.createdAt,
