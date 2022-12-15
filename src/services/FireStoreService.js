@@ -4,11 +4,25 @@ import {
   collection,
   getDocs,
   setDoc,
+  getDoc,
   doc,
 } from "firebase/firestore";
 class FireStoreService {
   constructor(fireStore) {
     this.db = fireStore;
+  }
+  async getUser(uid) {
+    try {
+      const docRef = doc(this.db, "users", uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        return { uid: docSnap.id, ...docSnap.data() };
+      } else {
+        return null;
+      }
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
   }
 
   async addUser(user) {

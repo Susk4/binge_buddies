@@ -8,9 +8,14 @@ export default function useFireStore() {
     }
     await FireStoreService.addUser(user);
   };
+  const getUser = async (uid) => {
+    const user = await FireStoreService.getUser(uid);
+    return user;
+  };
+
   const getUsers = async () => {
     const users = await FireStoreService.getUsers();
     return users;
   };
-  return { addUser, getUsers };
+  return { addUser, getUsers, getUser };
 }

@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from "react";
 import useAuth from "../hook/useAuth";
 import AuthService from "../services/AuthService";
+import useFireStore from "../hook/useFireStore";
 
 export default function AuthStateChanged({ children }) {
-	const { setUser } = useAuth();
-	const [loading, setLoading] = useState(true);
+  const { getUser } = useFireStore();
+  const { setUser } = useAuth();
+  const [loading, setLoading] = useState(true);
 
-	useEffect(() => {
-		AuthService.waitForUser((userCred) => {
-			setUser(userCred);
-			setLoading(false);
-		});
-	}, []);
+  useEffect(() => {
+    AuthService.waitForUser(async (userCred) => {
+      if (!userCred) {
+        setLoading(false);
+        return;
+      }
+      const user = await getUser(userCred.uid);
+      setUser(user);
+      setLoading(false);
+    });
+  }, []);
 
-	if (loading) {
-		return <h1>Loading...</h1>;
-	}
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
 
-	return children;
+  return children;
 }
