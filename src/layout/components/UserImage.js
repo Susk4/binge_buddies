@@ -3,10 +3,11 @@ import Image from "next/image";
 export default function UserImage() {
     const size = 30;
     const { user } = useAuth();
+
   return (
     <Image
       className=" rounded-full"
-      src={user.photoURL}
+      src={user.photoUrl}
       objectFit="cover"
       width={size}
       height={size}
