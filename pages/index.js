@@ -29,7 +29,7 @@ function Main({ auth }) {
           BingeBuddies is launching very soon.
         </h2>
         <h3 className="text-xl md:text-2xl text-orange-800 ">
-          Don't forget to check back regularly for updates
+          Dont forget to check back regularly for updates
         </h3>
         <div className=" self-center">
           <BiCameraMovie className="w-24 h-24 md:w-44 md:h-44" />

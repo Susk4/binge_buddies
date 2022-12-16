@@ -1,4 +1,3 @@
-import "../src/config/firebase.config";
 import LoginForm from "../components/Login/LoginForm";
 import { withPublic } from "../src/hook/route";
 

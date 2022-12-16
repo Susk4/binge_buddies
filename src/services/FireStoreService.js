@@ -1,6 +1,6 @@
-import { getApp } from "firebase/app";
+import { getApp, getFirestore } from "../config/firebase";
+
 import {
-  getFirestore,
   collection,
   getDocs,
   setDoc,

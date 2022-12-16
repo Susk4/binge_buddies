@@ -1,7 +1,5 @@
 import "../styles/globals.css";
 
-import "../src/config/firebase.config"
-
 
 import AppLayout from "../src/layout/AppLayout"
 import AuthStateChanged from "../src/layout/AuthStateChanged"
