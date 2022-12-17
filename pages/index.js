@@ -22,7 +22,7 @@ function Main({ auth }) {
     return <div>Loading</div>;
   }
   return (
-    <div className="flex justify-center h-screen text-center bg-orange-200 text-orange-900">
+    <div className="flex justify-center h-screen text-center  text-orange-900">
       <div className="flex flex-col mt-48">
         <h1 className="text-4xl md:text-9xl">BingeBuddies</h1>
         <h2 className="text-xl md:text-4xl text-orange-800">
