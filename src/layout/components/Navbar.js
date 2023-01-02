@@ -3,18 +3,19 @@ import { NAV_ITEMS } from "../../config/constants";
 import useClickOutSide from "../../hook/useClickOutSide";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoLogOutOutline } from "react-icons/io5";
-import {BiCameraMovie} from "react-icons/bi"
+import { BiCameraMovie } from "react-icons/bi";
 import useAuth from "../../hook/useAuth";
 import Link from "next/link";
 import UserImage from "./UserImage";
-
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const size = 30;
   const items = NAV_ITEMS;
   const mappedItems = items.map((item) => (
-    <div className="p-2 block hover:bg-orange-500">{item}</div>
+    <div className="p-2 block hover:bg-orange-500" key={item}>
+      {item}
+    </div>
   ));
   const { ref, isVisible, setIsVisible } = useClickOutSide(false);
 
@@ -23,7 +24,9 @@ export default function Navbar() {
       <div className=" text-orange-900 font-bold p-2">
         <div className=" flex h-10 items-center justify-between px-2">
           <div className="flex-none ">
-            <Link href="/"><BiCameraMovie className="w-8 h-8"/></Link>
+            <Link href="/" passHref legacyBehavior>
+              <BiCameraMovie className="w-8 h-8" />
+            </Link>
           </div>
 
           <NavItems />
