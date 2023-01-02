@@ -1,25 +1,30 @@
+import RangeSlider from "react-range-slider-input";
+import "react-range-slider-input/dist/style.css";
+import { useEffect, useState } from "react";
+
 const ReleaseYearRange = () => {
+  const { maxReleaseYear, minReleaseYear } = {
+    maxReleaseYear: 2023,
+    minReleaseYear: 1900,
+  };
+  const [value, setValue] = useState({
+    from: minReleaseYear,
+    to: maxReleaseYear,
+  });
+  useEffect(() => {
+  }, [value]);
   return (
     <div>
       <h2 className="text-xl text-orange-900">Release Year:</h2>
-      <div className="flex flex-col gap-2 ml-10">
-        <div className="flex justify-between">
-          <label htmlFor="min">From:</label>
-          <input
-            type="number"
-            placeholder="1900"
-            id="min"
-            className="w-1/2 rounded p-1"
-          />
-        </div>
-        <div className="flex justify-between">
-          <label htmlFor="max">To:</label>
-          <input
-            placeholder="2022"
-            id="max"
-            className="w-1/2 rounded p-1"
-          />
-        </div>
+      <div className="flex flex-row gap-2 items-center mx-10">
+        <span>{value.from}</span>
+        <RangeSlider
+          defaultValue={[minReleaseYear, maxReleaseYear]}
+          onInput={(range) => setValue({ from: range[0], to: range[1] })}
+          min={minReleaseYear}
+          max={maxReleaseYear}
+        />
+        <span>{value.to}</span>
       </div>
     </div>
   );
