@@ -12,31 +12,46 @@ export default function useAuth() {
 export function AuthProvider(props) {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
-  const { addUser } = useFireStore();
+  const { addUser, userExists } = useFireStore();
   const router = useRouter();
 
   const loginWithGoogle = async () => {
-    const { error, user } = await AuthService.loginWithGoogle();
-    setState(user, error)
-    router.push("/user");
-
+    const result= await AuthService.loginWithGoogle();
+    setState(result);
   };
   const loginWithFacebook = async () => {
-    const { error, user } = await AuthService.loginWithFacebook();
-    setState(user, error)
-    router.push("/user");
+    const { result } = await AuthService.loginWithFacebook();
+    setState(result);
   };
-  const setState = (user, error) => {
-    setUser(user ?? null);
-    addUser(user);
-    setError(error ?? "");
+  const setState = async ({user, additionalUserInfo, error}) => {
+    if (error) {
+      setError(error);
+      return;
+    }
+    setUser(user);
+
+
+    if (additionalUserInfo.isNewUser) {
+      console.log("user does not exist");
+      await addUser(user);
+      router.push("/user");
+    } else {
+      console.log("user exists");
+    }
   };
 
   const logout = async () => {
     await AuthService.logout();
     setUser(null);
   };
-  const auth = { user, error, loginWithGoogle, loginWithFacebook, logout, setUser };
+  const auth = {
+    user,
+    error,
+    loginWithGoogle,
+    loginWithFacebook,
+    logout,
+    setUser,
+  };
 
   return <authContext.Provider value={auth} {...props} />;
 }

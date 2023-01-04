@@ -6,6 +6,7 @@ import {
   FacebookAuthProvider,
   signOut,
   onAuthStateChanged,
+  getAdditionalUserInfo,
 } from "firebase/auth";
 
 class AuthService {
@@ -30,6 +31,7 @@ class AuthService {
       .then((userCred) => {
         return {
           user: userCred.user,
+          additionalUserInfo: getAdditionalUserInfo(userCred),
         };
       })
       .catch((error) => {
