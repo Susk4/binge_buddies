@@ -10,7 +10,7 @@ export default function UserImage() {
     <Link href="/user" passHref legacyBehavior>
       <Image
         className=" rounded-full"
-        src={user.photoUrl}
+        src={user.photoURL}
         objectFit="cover"
         width={size}
         height={size}

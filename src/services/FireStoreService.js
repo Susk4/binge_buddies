@@ -1,28 +1,9 @@
 import { getApp, getFirestore } from "../config/firebase";
 
-import {
-  collection,
-  getDocs,
-  setDoc,
-  getDoc,
-  doc,
-} from "firebase/firestore";
+import { collection, getDocs, setDoc, getDoc, doc } from "firebase/firestore";
 class FireStoreService {
   constructor(fireStore) {
     this.db = fireStore;
-  }
-  async getUser(uid) {
-    try {
-      const docRef = doc(this.db, "users", uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        return { uid: docSnap.id, ...docSnap.data() };
-      } else {
-        return null;
-      }
-    } catch (e) {
-      console.error("Error adding document: ", e);
-    }
   }
 
   async addUser(user) {
@@ -30,9 +11,9 @@ class FireStoreService {
       await setDoc(doc(this.db, "users", user.uid), {
         name: user.displayName,
         email: user.email,
-        createdAt: user.metadata.createdAt,
-        lastLogin: user.metadata.lastLoginAt,
-        photoUrl: user.photoURL,
+        account_created: user.metadata.createdAt,
+        last_ogin: user.metadata.lastLoginAt,
+        photo_url: user.photoURL,
       });
     } catch (e) {
       console.error("Error adding document: ", e);

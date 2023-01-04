@@ -6,7 +6,7 @@ const ProfileData = ({ user }) => {
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-center">
         <Image
-          src={user.photoUrl}
+          src={user.photoURL}
           width="100"
           height="100"
           alt="user photo"
@@ -14,7 +14,7 @@ const ProfileData = ({ user }) => {
         />
       </div>
       <div>
-        <h1 className="text-3xl text-center">{user.name}</h1>
+        <h1 className="text-3xl text-center">{user.displayName}</h1>
       </div>
       <div>
       </div>

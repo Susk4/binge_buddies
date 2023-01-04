@@ -34,7 +34,7 @@ export default function Navbar() {
           <div className="hidden justify-center md:flex flex-none gap-2">
             {user ? (
               <div className="flex items-center">
-                {user.photoUrl ? <UserImage /> : `User: ${user.name}`}
+                {user.photoURL ? <UserImage /> : `User: ${user.displayName}`}
               </div>
             ) : (
               <div>Not logged in</div>
@@ -44,7 +44,7 @@ export default function Navbar() {
             </button>
           </div>
           <div className="md:hidden flex items-center gap-2">
-            {user.photoUrl ? <UserImage /> : `User: ${user.name}`}
+            {user.photoURL ? <UserImage /> : `User: ${user.displayName}`}
             <button
               onClick={() => {
                 setIsVisible(!isVisible);
