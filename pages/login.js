@@ -4,7 +4,7 @@ import { withPublic } from "../src/hook/route";
 import styles from "../styles/Login.module.css";
 
 function Login({ auth }) {
-  const { loginWithGoogle, error } = auth;
+  const { loginWithGoogle, loginWithFacebook, error } = auth;
   return (
     <div className="h-screen flex justify-center items-center">
       <div
@@ -24,11 +24,11 @@ function Login({ auth }) {
           <hr className="border-orange-200"/>
         </div>
         {error && <div className="text-center">
-          <p className="text-red-500">{error}</p>
+          <p className="text-red-500 font-semibold">{error}</p>
         </div>}
 
         <div className="w-2/3 m-auto">
-          <LoginList loginWithGoogle={loginWithGoogle} />
+          <LoginList loginWithGoogle={loginWithGoogle} loginWithFacebook={loginWithFacebook}/>
         </div>
       </div>
     </div>
