@@ -20,7 +20,7 @@ export default function Navbar() {
 
   return (
     <nav ref={ref}>
-      <div className="bg-orange-300 text-orange-900 font-bold">
+      <div className=" text-orange-900 font-bold p-2">
         <div className=" flex h-10 items-center justify-between px-2">
           <div className="flex-none ">
             <Link href="/"><BiCameraMovie className="w-8 h-8"/></Link>
