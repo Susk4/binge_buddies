@@ -9,20 +9,28 @@ class TmdbService {
     this.genreUrl = `${this.baseUrl}/genre/movie/list?api_key=${this.apiKey}`;
     this.providerUrl = `${this.baseUrl}/watch/providers/movie?api_key=${this.apiKey}`;
 
-    this.imageBaseUrl = "https://image.tmdb.org/t/p/w500";
+    this.providerList = [
+      "Amazon Prime Video",
+      "Disney Plus",
+      "HBO Max",
+      "Hulu",
+      "Netflix",
+    ];
   }
 
   async getGenres() {
-
     const genres = await fetch(this.genreUrl);
     const data = await genres.json();
     return data;
   }
-  /* async getProviders() {
+  async getProviders() {
     const providers = await fetch(this.providerUrl);
-    const data = await providers.json();
-    return data;
-  } */
+    const providerData = await providers.json();
+    const supportedProviders = providerData.results.filter((p) =>
+      this.providerList.includes(p.provider_name)
+    );
+    return supportedProviders;
+  }
 }
 
 export default new TmdbService();

@@ -1,9 +1,12 @@
-//import useTmdb from "../../src/hook/useTmdb";
+import useTmdb from "../../src/hook/useTmdb";
+
+
 import { useState, useEffect } from "react";
 
-const ProviderList = () => {
-  //const { getProviders } = useTmdb();
-  const [providers, setProviders] = useState([]);
+const ProviderList = ({ userFilter, setUpdating, setUserFilter }) => {
+  const { getProviders } = useTmdb();
+  const [supportedProviders, setSupportedProviders] = useState(null);
+
   const providerList = [
     "Amazon Prime Video",
     "Disney Plus",
@@ -12,10 +15,41 @@ const ProviderList = () => {
     "Netflix",
   ];
   useEffect(() => {
-    /* getProviders().then((data) => {
-      setProviders(data.results);
-    }); */
+    getProviders().then((data) => {
+      setSupportedProviders(data);
+    });
   }, []);
+
+  const isSelected = (providerName) => {
+    const providerId = supportedProviders?.filter(
+      (provider) => provider.provider_name == providerName
+    )[0].provider_id;
+    return userFilter && userFilter.providers?.includes(providerId);
+  };
+
+
+
+  const handleOnChange = (providerName) => {
+    setUpdating(true);
+    const providerIds = supportedProviders
+      ?.filter((provider) => provider.provider_name == providerName)
+      .map((sp) => sp.provider_id);
+    if (userFilter.providers?.some((up) => providerIds.includes(up))) {
+      setUserFilter({
+        ...userFilter,
+        providers: userFilter.providers.filter(
+          (up) => !providerIds.includes(up)
+        ),
+      });
+    } else {
+      setUserFilter({
+        ...userFilter,
+        providers: [...(userFilter.providers || []), ...providerIds],
+      });
+    }
+  };
+
+  if (!userFilter) return <>Loading...</>;
 
   return (
     <div>
@@ -28,6 +62,8 @@ const ProviderList = () => {
               id={provider}
               name={provider}
               value={provider}
+              checked={isSelected(provider) || false}
+              onChange={() => handleOnChange(provider)}
             />
             <label htmlFor={provider} className="flex items-center">
               {provider}

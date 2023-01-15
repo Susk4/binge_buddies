@@ -41,7 +41,10 @@ export function AuthProvider(props) {
       /* const providerData = await getProviders();
       const providerIds = providerData.results.map((provider) => provider.provider_id);
        */
-      const filterData = { genres: genreIds };
+      const filterData = {
+        genres: genreIds,
+        release_year: { from: 1850, to: new Date().getFullYear() },
+      };
       await addUser(user, filterData);
       router.push("/user");
     } else {

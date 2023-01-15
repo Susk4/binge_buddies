@@ -1,45 +1,22 @@
 import useTmdb from "../../src/hook/useTmdb";
-import useAuth from "../../src/hook/useAuth";
 import useFireStore from "../../src/hook/useFireStore";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 
-const GenreList = () => {
-  const { user } = useAuth();
-  const { getUserFilter, updateUserFilter } = useFireStore();
-  const { getGenres } = useTmdb();
-  const [genres, setGenres] = useState([]);
-
-  const [updating, setUpdating] = useState(false);
-
-  const [userFilter, setUserFilter] = useState(null);
-
-  useEffect(() => {
-    getGenres().then((data) => {
-      setGenres(data.genres);
-    });
-    getUserFilter(user.uid).then((data) => {
-      setUserFilter(data);
-    });
-  }, []);
-  useMemo(() => {
-    if (updating) {
-      updateUserFilter(user.uid, userFilter);
-      setUpdating(false);
-    }
-  }, [userFilter]);
-
-  const handleOnChange = (id) => {
+const GenreList = ({ genres, userFilter, setUpdating, setUserFilter }) => {
+  const handleGenreChange = (id) => {
     setUpdating(true);
     if (userFilter.genres?.some((ug) => ug == id)) {
       setUserFilter({
-        userFilter,
+        ...userFilter,
         genres: userFilter.genres.filter((ug) => ug != id),
       });
     } else {
-      setUserFilter({ ...userFilter, genres: [...userFilter.genres || [], id] });
+      setUserFilter({
+        ...userFilter,
+        genres: [...(userFilter.genres || []), id],
+      });
     }
   };
-  if (!userFilter) return <>Loading...</>;
   return (
     <div>
       <h2 className="text-xl text-orange-900">Genres:</h2>
@@ -51,8 +28,8 @@ const GenreList = () => {
               id={name}
               name={name}
               value={name}
-              checked={userFilter.genres?.some((ug) => ug == id)}
-              onChange={() => handleOnChange(id)}
+              checked={userFilter.genres?.some((ug) => ug == id) || false}
+              onChange={() => handleGenreChange(id)}
             />
             <label htmlFor={name} className="flex items-center">
               {name}

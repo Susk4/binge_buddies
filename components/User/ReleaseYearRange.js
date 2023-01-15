@@ -1,28 +1,34 @@
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-const ReleaseYearRange = () => {
-  const { maxReleaseYear, minReleaseYear } = {
-    maxReleaseYear: 2023,
-    minReleaseYear: 1900,
+
+const ReleaseYearRange = ({ userFilter, minReleaseYear, maxReleaseYear, setUpdating, setUserFilter }) => {
+  const [value, setValue] = useState(userFilter.release_year);
+
+  const handleOnChange = (e) => {
+    setValue({ from: e[0], to: e[1] });
   };
-  const [value, setValue] = useState({
-    from: minReleaseYear,
-    to: maxReleaseYear,
-  });
-  useEffect(() => {
-  }, [value]);
+  const handleOnThumbDragEnd = (from, to) => {
+    setUpdating(true);
+    setUserFilter({
+      ...userFilter,
+      release_year: { from: from, to: to },
+    });
+  };
+
   return (
     <div>
       <h2 className="text-xl text-orange-900">Release Year:</h2>
       <div className="flex flex-row gap-2 items-center mx-10">
         <span>{value.from}</span>
         <RangeSlider
-          defaultValue={[minReleaseYear, maxReleaseYear]}
-          onInput={(range) => setValue({ from: range[0], to: range[1] })}
+          defaultValue={[value.from, value.to]}
+          onInput={(e) => handleOnChange(e)}
+          onThumbDragEnd={() => handleOnThumbDragEnd(value.from, value.to)}
           min={minReleaseYear}
           max={maxReleaseYear}
+          rangeSlideDisabled={true}
         />
         <span>{value.to}</span>
       </div>
