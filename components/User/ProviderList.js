@@ -1,17 +1,27 @@
+//import useTmdb from "../../src/hook/useTmdb";
+import { useState, useEffect } from "react";
+
 const ProviderList = () => {
-  const providers = [
-    "Netflix",
-    "Hulu",
-    "Disney+",
-    "Amazon Prime",
+  //const { getProviders } = useTmdb();
+  const [providers, setProviders] = useState([]);
+  const providerList = [
+    "Amazon Prime Video",
+    "Disney Plus",
     "HBO Max",
-    "Apple TV+",
+    "Hulu",
+    "Netflix",
   ];
+  useEffect(() => {
+    /* getProviders().then((data) => {
+      setProviders(data.results);
+    }); */
+  }, []);
+
   return (
     <div>
       <h2 className="text-xl text-orange-900">Providers:</h2>
-      <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-2 ml-10">
-        {providers.map((provider, index) => (
+      <div className="grid grid-cols-3 md:grid-cols-5 gap-2 ml-10">
+        {providerList.map((provider, index) => (
           <div key={index} className="gap-1 flex">
             <input
               type="checkbox"
