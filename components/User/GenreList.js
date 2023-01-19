@@ -1,8 +1,21 @@
 import useTmdb from "../../src/hook/useTmdb";
-import useFireStore from "../../src/hook/useFireStore";
 import { useState, useEffect } from "react";
+import { FilterContext } from "../../src/hook/useFilter";
+import { useContext } from "react";
 
-const GenreList = ({ genres, userFilter, setUpdating, setUserFilter }) => {
+const GenreList = () => {
+  const { userFilter, setUserFilter, updating, setUpdating } =
+    useContext(FilterContext);
+
+  const { getGenres } = useTmdb();
+  const [genres, setGenres] = useState([]);
+
+  useEffect(() => {
+    getGenres().then((data) => {
+      setGenres(data.genres);
+    });
+  }, []);
+
   const handleGenreChange = (id) => {
     setUpdating(true);
     if (userFilter.genres?.some((ug) => ug == id)) {
@@ -17,6 +30,7 @@ const GenreList = ({ genres, userFilter, setUpdating, setUserFilter }) => {
       });
     }
   };
+  if (!userFilter) return <>Loading...</>;
   return (
     <div>
       <h2 className="text-xl text-orange-900">Genres:</h2>

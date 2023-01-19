@@ -1,9 +1,11 @@
 import useTmdb from "../../src/hook/useTmdb";
-
+import { FilterContext } from "../../src/hook/useFilter";
+import { useContext } from "react";
 
 import { useState, useEffect } from "react";
 
-const ProviderList = ({ userFilter, setUpdating, setUserFilter }) => {
+const ProviderList = () => {
+  const { userFilter, setUserFilter, setUpdating } = useContext(FilterContext);
   const { getProviders } = useTmdb();
   const [supportedProviders, setSupportedProviders] = useState(null);
 
@@ -26,8 +28,6 @@ const ProviderList = ({ userFilter, setUpdating, setUserFilter }) => {
     )[0].provider_id;
     return userFilter && userFilter.providers?.includes(providerId);
   };
-
-
 
   const handleOnChange = (providerName) => {
     setUpdating(true);

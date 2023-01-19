@@ -1,10 +1,24 @@
 import RangeSlider from "react-range-slider-input";
 import "react-range-slider-input/dist/style.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { FilterContext } from "../../src/hook/useFilter";
+import { useContext } from "react";
 
+const ReleaseYearRange = () => {
+  const {
+    userFilter,
+    setUserFilter,
+    setUpdating,
+    minReleaseYear,
+    maxReleaseYear,
+  } = useContext(FilterContext);
 
-const ReleaseYearRange = ({ userFilter, minReleaseYear, maxReleaseYear, setUpdating, setUserFilter }) => {
-  const [value, setValue] = useState(userFilter.release_year);
+  const [value, setValue] = useState(null);
+  useEffect(() => {
+    if (userFilter) {
+      setValue(userFilter.release_year);
+    }
+  }, [userFilter]);
 
   const handleOnChange = (e) => {
     setValue({ from: e[0], to: e[1] });
@@ -16,7 +30,7 @@ const ReleaseYearRange = ({ userFilter, minReleaseYear, maxReleaseYear, setUpdat
       release_year: { from: from, to: to },
     });
   };
-
+  if (!value) return <>Loading...</>;
   return (
     <div>
       <h2 className="text-xl text-orange-900">Release Year:</h2>
