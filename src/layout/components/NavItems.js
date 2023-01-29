@@ -3,7 +3,7 @@ import { NAV_ITEMS } from "../../config/constants";
 export default function NavItems() {
   const items = NAV_ITEMS;
   const mappedItems = items.map((item) => (
-    <div className="flex hover:bg-orange-500 flex-grow  justify-center items-center ">
+    <div className="flex hover:bg-orange-500 hover:text-orange-50 rounded-3xl flex-grow  justify-center items-center " key={item}>
       {item}
     </div>
   ));

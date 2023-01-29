@@ -2,20 +2,29 @@ import { useState } from "react";
 import FireStoreService from "../services/FireStoreService";
 
 export default function useFireStore() {
-  const addUser = async (user) => {
+  const addUser = async (user, filterData) => {
     if (!user) {
       return;
     }
-    await FireStoreService.addUser(user);
+    await FireStoreService.addUser(user, filterData);
   };
+  const getUsers = async () => {
+    const users = await FireStoreService.getUsers();
+    return users;
+  };
+
   const getUser = async (uid) => {
     const user = await FireStoreService.getUser(uid);
     return user;
   };
 
-  const getUsers = async () => {
-    const users = await FireStoreService.getUsers();
-    return users;
+  const getUserFilter = async (uid) => {
+    const userFilter = await FireStoreService.getUserFilter(uid);
+    return userFilter;
   };
-  return { addUser, getUsers, getUser };
+
+  const updateUserFilter = async (uid, filterData) => {
+    await FireStoreService.updateUserFilter(uid, filterData);
+  };
+  return { addUser, getUsers, getUser, getUserFilter, updateUserFilter };
 }

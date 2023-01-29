@@ -1,16 +1,20 @@
-import  useAuth  from "../../hook/useAuth";
+import useAuth from "../../hook/useAuth";
 import Image from "next/image";
+import Link from "next/link";
+
 export default function UserImage() {
-    const size = 30;
-    const { user } = useAuth();
+  const size = 30;
+  const { user } = useAuth();
 
   return (
-    <Image
-      className=" rounded-full"
-      src={user.photoUrl}
-      objectFit="cover"
-      width={size}
-      height={size}
-    ></Image>
+    <Link href="/user" passHref legacyBehavior>
+      <Image
+        className=" rounded-full cursor-pointer"
+        src={user.photoURL}
+        objectFit="cover"
+        width={size}
+        height={size}
+      ></Image>
+    </Link>
   );
 }

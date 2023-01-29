@@ -14,8 +14,7 @@ export default function AuthStateChanged({ children }) {
         setLoading(false);
         return;
       }
-      const user = await getUser(userCred.uid);
-      setUser(user);
+      setUser(userCred);
       setLoading(false);
     });
   }, []);
