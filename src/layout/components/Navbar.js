@@ -13,7 +13,7 @@ export default function Navbar() {
   const size = 30;
   const items = NAV_ITEMS;
   const mappedItems = items.map((item) => (
-    <div className="p-2 block hover:bg-orange-500" key={item}>
+    <div className="p-2 hover:bg-orange-500" key={item}>
       {item}
     </div>
   ));
@@ -25,7 +25,7 @@ export default function Navbar() {
         <div className=" flex h-10 items-center justify-between px-2">
           <div className="flex-none ">
             <Link href="/" passHref legacyBehavior>
-              <BiCameraMovie className="w-8 h-8" />
+              <BiCameraMovie className="w-8 h-8 cursor-pointer" />
             </Link>
           </div>
 
@@ -56,6 +56,9 @@ export default function Navbar() {
         </div>
         <div className={` ${isVisible ? "" : "hidden"} md:hidden`}>
           {mappedItems}
+          <div className="px-2 hover:bg-orange-500 ">
+            <button onClick={logout} className="flex gap-2  items-center">Logout <IoLogOutOutline size={size} /></button>
+          </div>
         </div>
       </div>
     </nav>

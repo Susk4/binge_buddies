@@ -1,8 +1,7 @@
 import "../styles/globals.css";
 
-
-import AppLayout from "../src/layout/AppLayout"
-import AuthStateChanged from "../src/layout/AuthStateChanged"
+import AppLayout from "../src/layout/AppLayout";
+import AuthStateChanged from "../src/layout/AuthStateChanged";
 import { AuthProvider } from "../src/hook/useAuth";
 
 function MyApp({ Component, pageProps }) {

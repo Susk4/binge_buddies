@@ -9,7 +9,7 @@ export default function UserImage() {
   return (
     <Link href="/user" passHref legacyBehavior>
       <Image
-        className=" rounded-full"
+        className=" rounded-full cursor-pointer"
         src={user.photoURL}
         objectFit="cover"
         width={size}
