@@ -21,10 +21,6 @@ export function AuthProvider(props) {
     const result = await AuthService.loginWithGoogle();
     setState(result);
   };
-  const loginWithFacebook = async () => {
-    const { result } = await AuthService.loginWithFacebook();
-    setState(result);
-  };
   const setState = async ({ user, additionalUserInfo, error }) => {
     if (error) {
       setError(error);
@@ -60,7 +56,6 @@ export function AuthProvider(props) {
     user,
     error,
     loginWithGoogle,
-    loginWithFacebook,
     logout,
     setUser,
   };
