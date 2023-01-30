@@ -13,9 +13,11 @@ export default function Navbar() {
   const size = 30;
   const items = NAV_ITEMS;
   const mappedItems = items.map((item) => (
-    <div className="p-2 hover:bg-orange-500" key={item}>
-      {item}
-    </div>
+    <Link href={item.url}>
+      <div className="p-2 hover:bg-orange-500 cursor-pointer" key={item.label}>
+        {item.label}
+      </div>
+    </Link>
   ));
   const { ref, isVisible, setIsVisible } = useClickOutSide(false);
 
