@@ -14,7 +14,7 @@ export default function Navbar() {
   const items = NAV_ITEMS;
   const mappedItems = items.map((item) => (
     <Link href={item.url}>
-      <div className="p-2 hover:bg-orange-500 cursor-pointer" key={item.label}>
+      <div className="p-2 hover:bg-red-600 hover:text-white cursor-pointer" key={item.label}>
         {item.label}
       </div>
     </Link>
@@ -23,7 +23,7 @@ export default function Navbar() {
 
   return (
     <nav ref={ref}>
-      <div className=" text-orange-900 font-bold p-2">
+      <div className="font-bold p-2">
         <div className=" flex h-10 items-center justify-between px-2">
           <div className="flex-none ">
             <Link href="/" legacyBehavior>
@@ -57,7 +57,7 @@ export default function Navbar() {
         </div>
         <div className={` ${isVisible ? "" : "hidden"} md:hidden`}>
           {mappedItems}
-          <div className="px-2 hover:bg-orange-500 ">
+          <div className="p-2 hover:bg-red-600 hover:text-white ">
             <button onClick={logout} className="flex gap-2  items-center">
               Logout <IoLogOutOutline size={size} />
             </button>

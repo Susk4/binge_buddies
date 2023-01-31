@@ -53,7 +53,7 @@ const ProviderList = () => {
 
   return (
     <div>
-      <h2 className="text-xl text-orange-900">Providers:</h2>
+      <h2 className="text-xl ">Providers:</h2>
       <div className="grid grid-cols-3 md:grid-cols-5 gap-2 ml-10">
         {providerList.map((provider, index) => (
           <div key={index} className="gap-1 flex">
@@ -62,6 +62,7 @@ const ProviderList = () => {
               id={provider}
               name={provider}
               value={provider}
+              style={{ accentColor: "#7f1d1d" }}
               checked={isSelected(provider) || false}
               onChange={() => handleOnChange(provider)}
             />

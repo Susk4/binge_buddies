@@ -6,7 +6,7 @@ export default function NavItems() {
   const mappedItems = items.map((item) => (
     <Link href={item.url}>
       <div
-        className="flex hover:bg-orange-500 hover:text-orange-50 rounded-3xl flex-grow  justify-center items-center cursor-pointer "
+        className="flex hover:bg-red-500 hover:text-white rounded-3xl flex-grow  justify-center items-center cursor-pointer "
         key={item.label}
       >
         {item.label}
