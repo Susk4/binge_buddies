@@ -8,8 +8,7 @@ body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
-  background-color: #ffedd5;
-  overflow: hidden;
+  height: 100vh;
 }
 
 a {
@@ -19,4 +18,8 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+.range-slider__range, .range-slider__thumb {
+  background-color: #7f1d1d !important;
 }

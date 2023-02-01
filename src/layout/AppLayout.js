@@ -8,10 +8,14 @@ export default function AppLayout({ children }) {
   const { user } = useAuth();
   const auth = useAuth();
   if (!user) {
-    return <>{children}</>;
+    return (
+      <div className="bg-gradient-to-t from-red-600 text-red-900">
+        {children}
+      </div>
+    );
   }
   return (
-    <div>
+    <div className="bg-gradient-to-t from-red-600 text-red-900">
       <Navbar />
       {children}
     </div>
