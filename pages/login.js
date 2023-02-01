@@ -7,7 +7,7 @@ import styles from "../styles/misc/card.module.css";
 function Login({ auth }) {
   const { loginWithGoogle, loading, error } = auth;
   return (
-    <div className=" h-screen flex justify-center items-center ">
+    <div className="flex-grow flex-shrink flex justify-center items-center ">
       <div
         className={`mx-8 ${styles.card} rounded-xl m-auto p-4 flex flex-col gap-4 text-center`}
       >
