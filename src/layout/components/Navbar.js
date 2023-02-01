@@ -2,28 +2,21 @@ import NavItems from "./NavItems";
 import { NAV_ITEMS } from "../../config/constants";
 import useClickOutSide from "../../hook/useClickOutSide";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { IoLogOutOutline } from "react-icons/io5";
 import { BiCameraMovie } from "react-icons/bi";
+import { IoLogOutOutline } from "react-icons/io5";
 import useAuth from "../../hook/useAuth";
 import Link from "next/link";
 import UserImageLink from "./UserImageLink";
+import MobileNavItems from "./MobileNavItems";
 
 export default function Navbar() {
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const size = 30;
-  const items = NAV_ITEMS;
-  const mappedItems = items.map((item) => (
-    <Link href={item.url}>
-      <div className="p-2 hover:bg-red-600 hover:text-white cursor-pointer" key={item.label}>
-        {item.label}
-      </div>
-    </Link>
-  ));
   const { ref, isVisible, setIsVisible } = useClickOutSide(false);
 
   return (
     <nav ref={ref}>
-      <div className="font-bold p-2">
+      <div className={`font-bold ${isVisible ? "bg-white" : ""}`}>
         <div className=" flex h-10 items-center justify-between px-2">
           <div className="flex-none ">
             <Link href="/" legacyBehavior>
@@ -55,13 +48,8 @@ export default function Navbar() {
             </button>
           </div>
         </div>
-        <div className={` ${isVisible ? "" : "hidden"} md:hidden`}>
-          {mappedItems}
-          <div className="p-2 hover:bg-red-600 hover:text-white ">
-            <button onClick={logout} className="flex gap-2  items-center">
-              Logout <IoLogOutOutline size={size} />
-            </button>
-          </div>
+        <div className={` ${isVisible ? "" : "hidden"} md:hidden bg-white`}>
+          <MobileNavItems logout={logout} />
         </div>
       </div>
     </nav>
