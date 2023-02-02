@@ -1,6 +1,6 @@
 const LoginButtonLayout = ({text, children}) => {
   return (
-    <div className="flex">
+    <div className="flex text-white">
       <div>
         {children}
       </div>

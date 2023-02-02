@@ -1,9 +1,7 @@
 import { getApp, getAuth } from "../config/firebase";
 import {
   signInWithPopup,
-  signInWithRedirect,
   GoogleAuthProvider,
-  FacebookAuthProvider,
   signOut,
   onAuthStateChanged,
   getAdditionalUserInfo,
@@ -23,10 +21,7 @@ class AuthService {
   loginWithGoogle() {
     return this.login(new GoogleAuthProvider());
   }
-  loginWithFacebook() {
-    return this.login(new FacebookAuthProvider());
-  }
-  login(provider){
+  login(provider) {
     return signInWithPopup(this.auth, provider)
       .then((userCred) => {
         return {
@@ -41,17 +36,13 @@ class AuthService {
             error:
               "Your email is already registered with a different provider, please use that provider to login.",
           };
-        }
-        else if (error.code === "auth/popup-closed-by-user") {
+        } else if (error.code === "auth/popup-closed-by-user") {
           return {
-            error:
-              "Login flow was interrupted, please try again.",
+            error: "Login flow was interrupted, please try again.",
           };
-        }
-        else {
+        } else {
           return {
-            error:
-              "Something went wrong, please try again.",
+            error: "Something went wrong, please try again.",
           };
         }
       });

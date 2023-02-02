@@ -33,8 +33,8 @@ const ReleaseYearRange = () => {
   if (!value) return <>Loading...</>;
   return (
     <div>
-      <h2 className="text-xl text-orange-900">Release Year:</h2>
-      <div className="flex flex-row gap-2 items-center mx-10">
+      <h2 className="text-xl">Release Year:</h2>
+      <div className={`flex flex-row gap-2 items-center mx-10`}>
         <span>{value.from}</span>
         <RangeSlider
           defaultValue={[value.from, value.to]}

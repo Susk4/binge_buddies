@@ -13,27 +13,27 @@ export default function useAuth() {
 export function AuthProvider(props) {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
-  const { addUser, userExists } = useFireStore();
+  const [loading, setLoading] = useState(false);
+  const { addUser } = useFireStore();
   const { getGenres } = useTmdb();
   const router = useRouter();
 
   const loginWithGoogle = async () => {
+    setLoading(true);
     const result = await AuthService.loginWithGoogle();
     setState(result);
-  };
-  const loginWithFacebook = async () => {
-    const { result } = await AuthService.loginWithFacebook();
-    setState(result);
+    setLoading(false);
   };
   const setState = async ({ user, additionalUserInfo, error }) => {
     if (error) {
+      setLoading(false);
       setError(error);
       return;
     }
     setUser(user);
 
     if (additionalUserInfo.isNewUser) {
-      console.log("user does not exist");
+      //console.log("user does not exist");
 
       const genresData = await getGenres();
       const genreIds = genresData.genres.map((genre) => genre.id);
@@ -48,7 +48,7 @@ export function AuthProvider(props) {
       await addUser(user, filterData);
       router.push("/user");
     } else {
-      console.log("user exists");
+      //console.log("user exists");
     }
   };
 
@@ -60,9 +60,9 @@ export function AuthProvider(props) {
     user,
     error,
     loginWithGoogle,
-    loginWithFacebook,
     logout,
     setUser,
+    loading,
   };
 
   return <authContext.Provider value={auth} {...props} />;
