@@ -8,7 +8,7 @@ const UserFilter = ({ user }) => {
 
   return (
     <div>
-      <h1 className="text-3xl text-center text-orange-900">
+      <h1 className="text-3xl text-center">
         What are you looking for?
       </h1>
       <ReleaseYearRange />

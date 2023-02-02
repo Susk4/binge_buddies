@@ -33,7 +33,7 @@ const GenreList = () => {
   if (!userFilter) return <>Loading...</>;
   return (
     <div>
-      <h2 className="text-xl text-orange-900">Genres:</h2>
+      <h2 className="text-xl">Genres:</h2>
       <div className="grid grid-cols-3 md:grid-cols-5 gap-2 ml-10">
         {genres.map(({ name, id }) => (
           <div key={id} className="gap-1 flex">
@@ -42,6 +42,7 @@ const GenreList = () => {
               id={name}
               name={name}
               value={name}
+              style={{ accentColor: "#7f1d1d" }}
               checked={userFilter.genres?.some((ug) => ug == id) || false}
               onChange={() => handleGenreChange(id)}
             />

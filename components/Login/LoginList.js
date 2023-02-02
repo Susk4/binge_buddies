@@ -1,11 +1,12 @@
 import GoogleLogin from "./GoogleLogin";
-import FacebookLogin from "./FacebookLogin";
-const LoginList = ({loginWithGoogle, loginWithFacebook}) => {
+
+const LoginList = ({ loginWithGoogle, loading }) => {
+  if (loading) {
+    return <p className="text-center">Loading...</p>;
+  }
   return (
-    <div className="flex flex-col gap-2">
-      <GoogleLogin loginWithGoogle={loginWithGoogle}/>
-      <FacebookLogin loginWithFacebook={loginWithFacebook}/>
-      
+    <div>
+      <GoogleLogin loginWithGoogle={loginWithGoogle} />
     </div>
   );
 };
