@@ -1,10 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  distDir: 'build',
   reactStrictMode: true,
   images: {
-    domains: ['lh3.googleusercontent.com'],
-  },
-}
+    loader: "imgix",
+    path: "/",
 
-module.exports = nextConfig
+    domains: ["lh3.googleusercontent.com"],
+  },
+};
+
+module.exports = nextConfig;
