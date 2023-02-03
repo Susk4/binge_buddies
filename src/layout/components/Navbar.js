@@ -16,7 +16,7 @@ export default function Navbar() {
 
   return (
     <nav ref={ref}>
-      <div className={`font-bold ${isVisible ? "bg-white" : ""}`}>
+      <div className={`font-bold  p-1 ${isVisible ? "bg-white" : ""}`}>
         <div className=" flex h-10 items-center justify-between px-2">
           <div className="flex-none ">
             <Link href="/" legacyBehavior>
