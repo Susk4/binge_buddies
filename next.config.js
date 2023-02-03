@@ -2,9 +2,6 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    loader: "imgix",
-    path: "/",
-
     domains: ["lh3.googleusercontent.com"],
   },
 };
