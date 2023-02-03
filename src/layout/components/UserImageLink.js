@@ -4,7 +4,7 @@ import useAuth from "../../hook/useAuth";
 
 const UserImageLink = () => {
   const { user } = useAuth();
-  const size = 30;
+  const size = 40;
 
   const displayedAvatar = user.photoURL ? (
     <UserImage size={size} />

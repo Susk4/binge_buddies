@@ -10,48 +10,50 @@ import UserImageLink from "./UserImageLink";
 import MobileNavItems from "./MobileNavItems";
 
 export default function Navbar() {
-  const { logout } = useAuth();
-  const size = 30;
-  const { ref, isVisible, setIsVisible } = useClickOutSide(false);
+    const { logout } = useAuth();
+    const size = 30;
+    const { ref, isVisible, setIsVisible } = useClickOutSide(false);
 
-  return (
-    <nav ref={ref}>
-      <div className={`font-bold  p-1 ${isVisible ? "bg-white" : ""}`}>
-        <div className=" flex h-10 items-center justify-between px-2">
-          <div className="flex-none ">
-            <Link href="/" legacyBehavior>
-              <a>
-                <BiCameraMovie className="w-8 h-8 cursor-pointer" />
-              </a>
-            </Link>
-          </div>
+    return (
+        <nav ref={ref}>
+            <div className={`font-bold  p-1 ${isVisible ? "bg-white" : ""}`}>
+                <div className=" flex h-10 items-center justify-between px-2">
+                    <div className="flex-none ">
+                        <Link href="/" legacyBehavior>
+                            <a>
+                                <BiCameraMovie size={size} className="cursor-pointer" />
+                            </a>
+                        </Link>
+                    </div>
 
-          <NavItems />
+                    <NavItems />
 
-          <div className="hidden justify-center md:flex flex-none gap-2">
-            <div className="flex items-center">
-              <UserImageLink />
+                    <div className="hidden justify-center md:flex flex-none gap-2">
+                        <UserImageLink />
+
+                        <button onClick={logout}>
+                            <IoLogOutOutline size={size} />
+                        </button>
+                    </div>
+                    <div className="md:hidden flex items-center gap-2">
+                        <UserImageLink />
+                        <button
+                            onClick={() => {
+                                setIsVisible(!isVisible);
+                            }}
+                        >
+                            <GiHamburgerMenu size={size}/>
+                        </button>
+                    </div>
+                </div>
+                <div
+                    className={` ${
+                        isVisible ? "h-40" : "h-0"
+                    } md:h-0 bg-white overflow-hidden transition-all`}
+                >
+                    <MobileNavItems logout={logout} setIsVisible={setIsVisible}/>
+                </div>
             </div>
-
-            <button onClick={logout}>
-              <IoLogOutOutline size={size} />
-            </button>
-          </div>
-          <div className="md:hidden flex items-center gap-2">
-            <UserImageLink />
-            <button
-              onClick={() => {
-                setIsVisible(!isVisible);
-              }}
-            >
-              <GiHamburgerMenu />
-            </button>
-          </div>
-        </div>
-        <div className={` ${isVisible ? "" : "hidden"} md:hidden bg-white`}>
-          <MobileNavItems logout={logout} />
-        </div>
-      </div>
-    </nav>
-  );
+        </nav>
+    );
 }
