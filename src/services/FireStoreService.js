@@ -1,4 +1,4 @@
-import { getApp, getFirestore } from "../config/firebase";
+import { getApp, getFirestore } from "../config/firebase.config.js";
 
 import { collection, getDocs, setDoc, getDoc, doc } from "firebase/firestore";
 class FireStoreService {
