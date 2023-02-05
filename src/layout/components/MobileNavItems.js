@@ -2,7 +2,7 @@ import { NAV_ITEMS } from "../../config/constants";
 import Link from "next/link";
 import { IoLogOutOutline } from "react-icons/io5";
 
-const MobileNavItems = ({ logout }) => {
+const MobileNavItems = ({ logout, setIsVisible }) => {
   const items = NAV_ITEMS;
   const size = 30;
 
@@ -12,6 +12,7 @@ const MobileNavItems = ({ logout }) => {
         <Link href={item.url}>
           <div
             className="p-2 hover:bg-red-600 hover:text-white cursor-pointer"
+            onClick={() => setIsVisible(false)}
             key={item.label}
           >
             {item.label}
