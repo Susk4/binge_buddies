@@ -9,11 +9,10 @@ const MobileNavItems = ({ logout, setIsVisible }) => {
   return (
     <div className="">
       {items.map((item) => (
-        <Link href={item.url}>
+        <Link href={item.url} key={item.label}>
           <div
             className="p-2 hover:bg-red-600 hover:text-white cursor-pointer"
             onClick={() => setIsVisible(false)}
-            key={item.label}
           >
             {item.label}
           </div>
