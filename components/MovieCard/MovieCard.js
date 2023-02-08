@@ -21,19 +21,6 @@ const db = [
 ];
 
 const MovieCard = () => {
-  const [flipped, setFlipped] = useState(false);
-  const controls = useAnimation();
-
-  useEffect(() => {
-    console.log(flipped);
-    controls.start({
-      rotateY: flipped ? 180 : 0,
-    });
-  }, [flipped]);
-  const onTap = () => {
-    console.log("tapped");
-    setFlipped((prev) => !prev);
-  };
   return (
     <div className="w-full h-full">
       <Stack onVote={(item, vote) => console.log(item, vote)} list={db}></Stack>

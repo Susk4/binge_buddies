@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { motion, useMotionValue, useAnimation } from "framer-motion";
+import VoteButtonBar from "./VoteButtonBar";
 
 const Card = ({ children, style, onVote, id, ...props }) => {
   // motion stuff
@@ -66,19 +67,15 @@ const Card = ({ children, style, onVote, id, ...props }) => {
     return () => unsubscribeX();
   });
   const like = async () => {
-    console.log("like");
     setDirection("right");
     setVelocity(500);
     setConstrained(false);
     await controls.start({
       x: 500,
     });
-    controls.set("hidden");
     onVote(true);
   };
   const dislike = async () => {
-    console.log("dislike");
-
     setDirection("left");
     setVelocity(-500);
     setConstrained(false);
@@ -97,26 +94,13 @@ const Card = ({ children, style, onVote, id, ...props }) => {
       ref={cardElem}
       style={{ x }}
       onDrag={getTrajectory}
-      onDragEnd={() => flyAway(500)}
+      onDragEnd={() => flyAway(100)}
       {...props}
     >
-      <div className="w-64 h-64 flex flex-col">
+      <div className=" w-96 h-96 flex flex-col rounded-xl p-2 bg-white">
         {children}
 
-        <div className="flex flex-row justify-between p-2 w-full">
-          <motion.button
-            className="bg-red-600 p-2 text-white font-bold rounded"
-            onTap={dislike}
-          >
-            Dislike
-          </motion.button>
-          <motion.button
-            className="bg-green-600 p-2 text-black font-bold rounded"
-            onTap={like}
-          >
-            Like
-          </motion.button>
-        </div>
+        <VoteButtonBar like={like} dislike={dislike} />
       </div>
     </motion.div>
   );
