@@ -84,11 +84,12 @@ const Card = ({ children, style, onVote, id, ...props }) => {
       className="absolute w-5/6 h-4/6 max-w-md max-h-md flex "
       animate={controls}
       dragConstraints={constrained && { left: 0, right: 0, top: 0, bottom: 0 }}
+      dragSnapToOrigin={true}
       dragElastic={1}
       ref={cardElem}
       style={{ x }}
       onDrag={getTrajectory}
-      onDragEnd={() => flyAway(250)}
+      onDragEnd={() => flyAway(100)}
       {...props}
     >
       <div className="flex-grow flex flex-col p-2 rounded-xl bg-white">
