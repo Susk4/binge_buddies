@@ -88,7 +88,7 @@ const Card = ({ children, style, onVote, id, ...props }) => {
       ref={cardElem}
       style={{ x }}
       onDrag={getTrajectory}
-      onDragEnd={() => flyAway(500)}
+      onDragEnd={() => flyAway(250)}
       {...props}
     >
       <div className="flex-grow flex flex-col p-2 rounded-xl bg-white">
