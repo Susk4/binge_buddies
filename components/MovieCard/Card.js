@@ -87,7 +87,7 @@ const Card = ({ children, style, onVote, id, ...props }) => {
 
   return (
     <motion.div
-      className="absolute"
+      className="absolute w-5/6 h-4/6 max-w-md max-h-md flex "
       animate={controls}
       dragConstraints={constrained && { left: 0, right: 0, top: 0, bottom: 0 }}
       dragElastic={1}
@@ -97,7 +97,7 @@ const Card = ({ children, style, onVote, id, ...props }) => {
       onDragEnd={() => flyAway(100)}
       {...props}
     >
-      <div className=" w-96 h-96 flex flex-col rounded-xl p-2 bg-white">
+      <div className="flex-grow flex flex-col p-2 rounded-xl bg-white">
         {children}
 
         <VoteButtonBar like={like} dislike={dislike} />

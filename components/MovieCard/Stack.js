@@ -27,7 +27,7 @@ const Stack = ({ onVote, list, ...props }) => {
     <>
       <div
         {...props}
-        className="w-full h-full overflow-hidden flex justify-center items-center relative"
+        className="w-full h-full overflow-hidden flex justify-center items-center "
       >
         {stack.map((item, index) => {
           let isTop = index === stack.length - 1;
