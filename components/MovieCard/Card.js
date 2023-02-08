@@ -13,7 +13,7 @@ const Card = ({ children, style, onVote, id, ...props }) => {
 
   const [direction, setDirection] = useState();
 
-  const [velocity, setVelocity] = useState();
+  const [offset, setOffset] = useState(0);
 
   const getVote = (childNode, parentNode) => {
     const childRect = childNode.getBoundingClientRect();
@@ -29,11 +29,11 @@ const Card = ({ children, style, onVote, id, ...props }) => {
 
   // determine direction of swipe based on velocity
   const getDirection = () => {
-    return velocity >= 1 ? "right" : velocity <= -1 ? "left" : undefined;
+    return offset >= 1 ? "right" : offset <= -1 ? "left" : undefined;
   };
 
   const getTrajectory = () => {
-    setVelocity(x.getVelocity());
+    setOffset(x.get());
     setDirection(getDirection());
   };
 
@@ -47,7 +47,7 @@ const Card = ({ children, style, onVote, id, ...props }) => {
         : parentWidth / 2 + childWidth / 2;
     };
 
-    if (direction && Math.abs(velocity) > min) {
+    if (direction && Math.abs(offset) > min) {
       setConstrained(false);
       controls.start({
         x: flyAwayDistance(direction),
@@ -55,7 +55,7 @@ const Card = ({ children, style, onVote, id, ...props }) => {
     }
   };
   useEffect(() => {
-    const unsubscribeX = x.onChange(() => {
+    const unsubscribeX = x.on("change", () => {
       if (cardElem.current) {
         const childNode = cardElem.current;
         const parentNode = cardElem.current.parentNode;
@@ -67,20 +67,14 @@ const Card = ({ children, style, onVote, id, ...props }) => {
     return () => unsubscribeX();
   });
   const like = async () => {
-    setDirection("right");
-    setVelocity(500);
-    setConstrained(false);
     await controls.start({
-      x: 500,
+      x: cardElem.current.parentNode.getBoundingClientRect().width / 2,
     });
     onVote(true);
   };
   const dislike = async () => {
-    setDirection("left");
-    setVelocity(-500);
-    setConstrained(false);
     await controls.start({
-      x: -500,
+      x: (-1 * cardElem.current.parentNode.getBoundingClientRect().width) / 2,
     });
     onVote(false);
   };
@@ -94,7 +88,7 @@ const Card = ({ children, style, onVote, id, ...props }) => {
       ref={cardElem}
       style={{ x }}
       onDrag={getTrajectory}
-      onDragEnd={() => flyAway(100)}
+      onDragEnd={() => flyAway(500)}
       {...props}
     >
       <div className="flex-grow flex flex-col p-2 rounded-xl bg-white">
