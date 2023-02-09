@@ -18,6 +18,10 @@ a {
   box-sizing: border-box;
 }
 
+button:focus {
+  outline: none;
+}
+
 .range-slider__range,
 .range-slider__thumb {
   background-color: #7f1d1d !important;
