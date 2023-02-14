@@ -6,9 +6,15 @@ export default function useTmdb() {
     const gs = await TmdbService.getGenres();
     return gs;
   };
-   const getProviders = async () => {
+  const getProviders = async () => {
     const ps = await TmdbService.getProviders();
     return ps;
   };
-  return { getGenres, getProviders };
+
+  const discoverMovies = async (filter) => {
+    const movies = await TmdbService.discoverMovies(filter);
+    return movies;
+  };
+
+  return { getGenres, getProviders, discoverMovies };
 }
