@@ -33,7 +33,7 @@ class TmdbService {
     return supportedProviders;
   }
   //discover movies by filter {genres, providers, release_year: {from,to}}
-  async discoverMovies(filter) {
+  async discoverMovies(filter, page) {
     const genres = await fetch(this.genreUrl);
     const genresData = await genres.json();
     const exludeGenres = genresData.genres
@@ -50,6 +50,7 @@ class TmdbService {
     url += `&with_watch_providers=${filter.providers.join(",")}`;
     url += `&release_date.gte=${filter.release_year.from}`;
     url += `&release_date.lte=${filter.release_year.to}`;
+    url += `&page=${page}`;
     console.log(url);
     const movies = await fetch(url);
     const data = await movies.json();

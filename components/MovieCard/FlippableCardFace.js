@@ -6,7 +6,7 @@ const FlippableCardFace = ({ styles, children, onClick, backgroundURL }) => {
     <div
       className={`${styles} rounded-xl`}
       style={{
-        background: backgroundURL
+        backgroundImage: backgroundURL
           ? `url(https://image.tmdb.org/t/p/original${backgroundURL})`
           : "red",
         backgroundSize: "cover",
