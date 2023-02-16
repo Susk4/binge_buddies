@@ -67,16 +67,20 @@ const Card = ({ children, style, onVote, id, ...props }) => {
     return () => unsubscribeX();
   });
   const like = async () => {
-    await controls.start({
-      x: cardElem.current.parentNode.getBoundingClientRect().width / 2,
-    });
-    onVote(true);
+    if (props.drag) {
+      await controls.start({
+        x: cardElem.current.parentNode.getBoundingClientRect().width / 2,
+      });
+      onVote(true);
+    }
   };
   const dislike = async () => {
-    await controls.start({
-      x: (-1 * cardElem.current.parentNode.getBoundingClientRect().width) / 2,
-    });
-    onVote(false);
+    if (props.drag) {
+      await controls.start({
+        x: (-1 * cardElem.current.parentNode.getBoundingClientRect().width) / 2,
+      });
+      onVote(false);
+    }
   };
 
   return (
@@ -95,7 +99,7 @@ const Card = ({ children, style, onVote, id, ...props }) => {
       <div className="flex-grow flex flex-col p-2 rounded-xl bg-white">
         {children}
 
-        <VoteButtonBar like={like} dislike={dislike} />
+        <VoteButtonBar drag like={like} dislike={dislike} />
       </div>
     </motion.div>
   );
