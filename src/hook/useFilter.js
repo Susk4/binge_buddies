@@ -20,19 +20,21 @@ export function useFilter() {
   };
 
   useEffect(() => {
-    setLoading(true);
-    getUserFilter(user.uid).then((data) => {
-      if (data.release_year) {
-        setUserFilter(data);
-      } else {
-        setUserFilter({
-          ...data,
-          release_year: { from: minReleaseYear, to: maxReleaseYear },
-        });
-      }
-      setLoading(false);
-    });
-  }, []);
+    if (user) {
+      setLoading(true);
+      getUserFilter(user.uid).then((data) => {
+        if (data.release_year) {
+          setUserFilter(data);
+        } else {
+          setUserFilter({
+            ...data,
+            release_year: { from: minReleaseYear, to: maxReleaseYear },
+          });
+        }
+        setLoading(false);
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     if (updating) {
