@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
 import Card from "./Card";
-import FlippableCard from "./FlippableCard";
+import MovieInfo from "./MovieInfo";
 import useTmdb from "../../src/hook/useTmdb";
 import { FilterContext } from "../../src/hook/useFilter";
 import useFireStore from "../../src/hook/useFireStore";
@@ -85,7 +85,7 @@ const MoviesCards = ({ user }) => {
               key={item.name || index}
               onVote={(result) => handleVote(item, result)}
             >
-              <FlippableCard item={item} />
+              <MovieInfo item={item} />
             </Card>
           );
         })}
