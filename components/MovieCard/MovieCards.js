@@ -3,10 +3,12 @@ import Card from "./Card";
 import FlippableCard from "./FlippableCard";
 import useTmdb from "../../src/hook/useTmdb";
 import { FilterContext } from "../../src/hook/useFilter";
+import useFireStore from "../../src/hook/useFireStore";
 
-const MoviesCards = () => {
+const MoviesCards = ({ user }) => {
   const { userFilter, loading: filterLoading } = useContext(FilterContext);
   const { discoverMovies, loading: discoverLoading } = useTmdb();
+  const { addMovieToUser, storeMovie } = useFireStore();
   const [stack, setStack] = useState(null);
   const [likes, setLikes] = useState([]);
   const [dislikes, setDislikes] = useState([]);
@@ -27,8 +29,8 @@ const MoviesCards = () => {
   }, [stack]);
 
   const discover = useCallback(() => {
-    discoverMovies(userFilter, page).then((res) => {
-      setStack(res.results.length ? res.results : null);
+    discoverMovies(userFilter, page, user.uid).then((res) => {
+      setStack(res.results && res.results.length ? res.results : null);
       setPage(res.page + 1);
     });
   }, [userFilter, page]);
@@ -45,9 +47,11 @@ const MoviesCards = () => {
 
     if (vote === true) {
       setLikes([...likes, item]);
+      addMovieToUser(user.uid, item);
     } else {
       setDislikes([...dislikes, item]);
     }
+    storeMovie(item);
 
     console.log("last item: ", item, vote);
   };

@@ -8,7 +8,7 @@ class TmdbService {
 
     this.genreUrl = `${this.baseUrl}/genre/movie/list?api_key=${this.apiKey}`;
     this.providerUrl = `${this.baseUrl}/watch/providers/movie?api_key=${this.apiKey}`;
-    this.discoverUrl = `${this.baseUrl}/discover/movie?api_key=${this.apiKey}&include_adult=false&include_video=false`;
+    this.discoverUrl = `${this.baseUrl}/discover/movie?api_key=${this.apiKey}&include_adult=false&include_video=false&vote_count.gte=100&with_original_language=en`;
 
     this.providerList = [
       "Amazon Prime Video",
@@ -33,7 +33,8 @@ class TmdbService {
     return supportedProviders;
   }
   //discover movies by filter {genres, providers, release_year: {from,to}}
-  async discoverMovies(filter, page) {
+  async discoverMovies(filter, page, usersMovies) {
+    console.log(usersMovies);
     const genres = await fetch(this.genreUrl);
     const genresData = await genres.json();
     const exludeGenres = genresData.genres
@@ -48,12 +49,23 @@ class TmdbService {
 
     url += `&without_genres=${exludeGenres.join(",")}`;
     url += `&with_watch_providers=${filter.providers.join(",")}`;
-    url += `&release_date.gte=${filter.release_year.from}`;
-    url += `&release_date.lte=${filter.release_year.to}`;
+    url += `&primary_release_date.gte=${filter.release_year.from}`;
+    url += `&primary_release_date.lte=${filter.release_year.to}`;
     url += `&page=${page}`;
     console.log(url);
     const movies = await fetch(url);
     const data = await movies.json();
+    if (data.results.length === 0) return data;
+
+    const filteredResults = data.results.filter(
+      (m) => !usersMovies.includes(m.id)
+    );
+
+    if (filteredResults.length === 0) {
+      return this.discoverMovies(filter, page + 1, usersMovies);
+    }
+    data.results = filteredResults;
+
     return data;
   }
 }

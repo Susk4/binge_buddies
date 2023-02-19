@@ -1,7 +1,9 @@
 import TmdbService from "../services/TmdbService";
 import { useState } from "react";
+import useFireStore from "./useFireStore";
 
 export default function useTmdb() {
+  const { getUsersMovies } = useFireStore();
   const [loading, setLoading] = useState(false);
 
   const getGenres = async () => {
@@ -13,9 +15,10 @@ export default function useTmdb() {
     return ps;
   };
 
-  const discoverMovies = async (filter, page = 1) => {
+  const discoverMovies = async (filter, page = 1, uid) => {
     setLoading(true);
-    const movies = await TmdbService.discoverMovies(filter, page);
+    const usersMovies = await getUsersMovies(uid);
+    const movies = await TmdbService.discoverMovies(filter, page, usersMovies);
     setLoading(false);
     return movies;
   };

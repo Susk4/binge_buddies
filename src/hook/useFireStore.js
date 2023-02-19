@@ -26,5 +26,27 @@ export default function useFireStore() {
   const updateUserFilter = async (uid, filterData) => {
     await FireStoreService.updateUserFilter(uid, filterData);
   };
-  return { addUser, getUsers, getUser, getUserFilter, updateUserFilter };
+
+  const getUsersMovies = async (uid) => {
+    const usersMovies = await FireStoreService.getUsersMovies(uid);
+    return usersMovies;
+  };
+
+  const addMovieToUser = async (uid, movie) => {
+    await FireStoreService.addMovieToUser(uid, movie);
+  };
+  const storeMovie = async (movie) => {
+    await FireStoreService.storeMovie(movie);
+  };
+
+  return {
+    addUser,
+    getUsers,
+    getUser,
+    getUserFilter,
+    updateUserFilter,
+    addMovieToUser,
+    storeMovie,
+    getUsersMovies,
+  };
 }
