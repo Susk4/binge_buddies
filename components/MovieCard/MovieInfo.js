@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MovieInfoFace from "./MovieInfoFace";
+import Pill from "../misc/Pill";
 
 const FlippableCard = ({ item }) => {
   const [flipCard, setflipCard] = useState(false);
@@ -49,11 +50,3 @@ const FlippableCard = ({ item }) => {
 };
 
 export default FlippableCard;
-
-const Pill = ({ text }) => {
-  return (
-    <span className="text-lg font-semibold p-1 px-2  rounded-xl bg-teal-400 text-black">
-      {text}
-    </span>
-  );
-};
