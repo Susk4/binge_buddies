@@ -2,6 +2,8 @@ import { useState } from "react";
 import FireStoreService from "../services/FireStoreService";
 
 export default function useFireStore() {
+  const [loading, setLoading] = useState(false);
+
   const addUser = async (user, filterData) => {
     if (!user) {
       return;
@@ -39,7 +41,15 @@ export default function useFireStore() {
     await FireStoreService.storeMovie(movie);
   };
 
+  const getUsersMoviesData = async (uid) => {
+    setLoading(true);
+    const usersMovies = await FireStoreService.getUsersMoviesData(uid);
+    setLoading(false);
+    return usersMovies;
+  };
+
   return {
+    loading,
     addUser,
     getUsers,
     getUser,
@@ -47,6 +57,7 @@ export default function useFireStore() {
     updateUserFilter,
     addMovieToUser,
     storeMovie,
+    getUsersMoviesData,
     getUsersMovies,
   };
 }

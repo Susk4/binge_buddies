@@ -8,8 +8,6 @@ import {
   doc,
   updateDoc,
   arrayUnion,
-  add,
-  addDoc,
 } from "firebase/firestore";
 class FireStoreService {
   constructor(fireStore) {
@@ -101,6 +99,23 @@ class FireStoreService {
       await setDoc(doc(this.db, "movies", movie.id.toString()), {
         ...movie,
       });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }
+
+  async getUsersMoviesData(uid) {
+    try {
+      const movies = await this.getUsersMovies(uid);
+      const colRef = collection(this.db, "movies");
+      const moviesData = await getDocs(colRef);
+      const data = [];
+      moviesData.forEach((doc) => {
+        if (movies.includes(doc.data().id)) {
+          data.push(doc.data());
+        }
+      });
+      return data;
     } catch (e) {
       console.error("Error adding document: ", e);
     }
