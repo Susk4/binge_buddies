@@ -29,7 +29,7 @@ const FlippableCard = ({ item }) => {
           onClick={() => setflipCard((prev) => !prev)}
         >
           <div
-            className="flex items-end p-2"
+            className="flex items-end p-2 h-full"
             style={{
               background: "rgba(0,0,0,0.6)",
             }}

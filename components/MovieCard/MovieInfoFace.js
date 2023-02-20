@@ -1,21 +1,28 @@
 import React from "react";
-import { HiSwitchHorizontal } from "react-icons/hi";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const MovieInfoFace = ({ children, onClick, backgroundURL }) => {
   return (
     <motion.div
       onTap={onClick}
-      className="flex h-full overflow-hidden rounded-xl cursor-pointer "
-      style={{
+      className="relative flex h-full overflow-hidden rounded-xl cursor-pointer "
+      /* style={{
         backgroundImage: backgroundURL
           ? `url(https://image.tmdb.org/t/p/original${backgroundURL})`
           : "red",
         backgroundSize: "cover",
         backgroundPosition: "center",
-      }}
+      }} */
     >
-      {children}
+      <div className="relative w-full h-full">
+        <Image
+          src={`https://image.tmdb.org/t/p/original/${backgroundURL}`}
+          layout="fill"
+          priority
+        />
+      </div>
+      <div className="absolute h-full w-full">{children}</div>
     </motion.div>
   );
 };

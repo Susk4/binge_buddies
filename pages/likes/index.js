@@ -4,6 +4,7 @@ import styles from "../../styles/misc/card.module.css";
 import { useState } from "react";
 import { useEffect } from "react";
 import Pill from "../../components/misc/Pill";
+import Image from "next/image";
 
 function Likes({ auth }) {
   const { getUsersMoviesData, loading } = useFireStore();
@@ -36,11 +37,14 @@ function Likes({ auth }) {
         return (
           <div key={movie.id}>
             <div className={`flex flex-row items-center  gap-2`}>
-              <img
-                src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-                alt={movie.title}
-                className="w-30 h-52 rounded-xl"
-              />
+              <div className="flex-shrink-0 block relative w-56 h-56">
+                <Image
+                  src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+                  layout="fill"
+                  priority
+                  objectFit="contain"
+                />
+              </div>
 
               <div className="flex flex-col gap-2">
                 <h1 className="text-2xl font-bold">{movie.title}</h1>
