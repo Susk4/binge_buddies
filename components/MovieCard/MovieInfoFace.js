@@ -20,6 +20,7 @@ const MovieInfoFace = ({ children, onClick, backgroundURL }) => {
           src={`https://image.tmdb.org/t/p/original/${backgroundURL}`}
           layout="fill"
           priority
+          unoptimized
         />
       </div>
       <div className="absolute h-full w-full">{children}</div>

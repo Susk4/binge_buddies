@@ -43,6 +43,7 @@ function Likes({ auth }) {
                   layout="fill"
                   priority
                   objectFit="contain"
+                  unoptimized
                 />
               </div>
 
