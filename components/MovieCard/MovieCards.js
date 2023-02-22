@@ -10,14 +10,13 @@ const MoviesCards = ({ user }) => {
   const { discoverMovies, loading: discoverLoading } = useTmdb();
   const { addMovieToUser, storeMovie } = useFireStore();
   const [stack, setStack] = useState(null);
-  const [likes, setLikes] = useState([]);
-  const [dislikes, setDislikes] = useState([]);
   const [page, setPage] = useState(1);
 
   //set initial stack
   useEffect(() => {
     if (userFilter) {
       discover();
+      console.log("first fetch");
     }
   }, [userFilter]);
 
@@ -25,6 +24,7 @@ const MoviesCards = ({ user }) => {
   useEffect(() => {
     if (stack && stack.length === 0) {
       discover();
+      console.log("fetch if empty");
     }
   }, [stack]);
 
@@ -46,20 +46,11 @@ const MoviesCards = ({ user }) => {
     setStack(newStack);
 
     if (vote === true) {
-      setLikes([...likes, item]);
       addMovieToUser(user.uid, item);
     } else {
-      setDislikes([...dislikes, item]);
     }
     storeMovie(item);
-
-    console.log("last item: ", item, vote);
   };
-
-  useEffect(() => {
-    console.log("likes", likes);
-    console.log("dislikes", dislikes);
-  }, [likes, dislikes]);
 
   if (discoverLoading || filterLoading)
     return (
