@@ -60,5 +60,9 @@ export function AuthProvider(props) {
     loading,
   };
 
-  return <authContext.Provider value={auth} {...props} />;
+  return (
+    <div className="bg-gradient-to-t from-red-600 text-red-900 h-full w-full fixed top-0 left-0 flex flex-col">
+      <authContext.Provider value={auth} {...props} />;
+    </div>
+  );
 }

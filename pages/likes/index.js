@@ -5,26 +5,12 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Pill from "../../components/misc/Pill";
 import Image from "next/image";
+import FireStoreService from "../../src/services/FireStoreService";
 
-function Likes({ auth }) {
-  const { getUsersMoviesData, loading } = useFireStore();
-  const [moviesData, setMoviesData] = useState([]);
+import useAuth from "../../src/hook/useAuth";
 
-  useEffect(() => {
-    getUsersMoviesData(auth.user.uid).then((data) => {
-      setMoviesData(data);
-    });
-  }, []);
-
-  useEffect(() => {
-    console.log(moviesData);
-  }, [moviesData]);
-
-  if (loading) {
-    return <>Loading...</>;
-  }
-
-  if (moviesData.length === 0) {
+function Likes({ auth, movies }) {
+  if (movies.length === 0) {
     return <>You have no liked movies.</>;
   }
 
@@ -33,7 +19,7 @@ function Likes({ auth }) {
       className={`m-2 p-2 ${styles.card} flex-shrink basis-auto min-h-0 rounded-xl flex flex-col gap-2 overflow-auto md:w-3/5`}
     >
       <h1 className="text-2xl font-bold text-center ">Likes</h1>
-      {moviesData.map((movie) => {
+      {movies.map((movie) => {
         return (
           <div key={movie.id}>
             <div className={`flex flex-row items-center  gap-2`}>
@@ -64,3 +50,20 @@ function Likes({ auth }) {
   );
 }
 export default withProtected(Likes);
+
+// server side render for this page
+export async function getServerSideProps(context) {
+  const { uid } = context.req.cookies;
+  //const { getUsersMoviesData } = useFireStore();
+
+  console.log("render", uid);
+
+  if (!uid) return { props: {} };
+  const moviesData = await FireStoreService.getUsersMoviesData(uid);
+
+  return {
+    props: {
+      movies: moviesData,
+    },
+  };
+}
