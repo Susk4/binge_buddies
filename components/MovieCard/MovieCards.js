@@ -2,11 +2,18 @@ import React, { useEffect, useState, useContext, useCallback } from "react";
 import Card from "./Card";
 import MovieInfo from "./MovieInfo";
 import useTmdb from "../../src/hook/useTmdb";
-import { FilterContext } from "../../src/hook/useFilter";
+import {
+  ReleaseYearContext,
+  ProviderContext,
+  GenreContext,
+} from "../../src/hook/useFilter";
 import useFireStore from "../../src/hook/useFireStore";
 
 const MoviesCards = ({ user }) => {
-  const { userFilter, loading: filterLoading } = useContext(FilterContext);
+  const { genres } = useContext(GenreContext);
+  const { providers } = useContext(ProviderContext);
+  const { release_year } = useContext(ReleaseYearContext);
+
   const { discoverMovies, loading: discoverLoading } = useTmdb();
   const { addMovieToUser, storeMovie } = useFireStore();
   const [stack, setStack] = useState(null);
@@ -14,11 +21,11 @@ const MoviesCards = ({ user }) => {
 
   //set initial stack
   useEffect(() => {
-    if (userFilter) {
+    if (genres && providers && release_year) {
       discover();
       console.log("first fetch");
     }
-  }, [userFilter]);
+  }, [genres, providers, release_year]);
 
   // if stack is empty, set it to the list
   useEffect(() => {
@@ -29,11 +36,13 @@ const MoviesCards = ({ user }) => {
   }, [stack]);
 
   const discover = useCallback(() => {
-    discoverMovies(userFilter, page, user.uid).then((res) => {
-      setStack(res.results && res.results.length ? res.results : null);
-      setPage(res.page + 1);
-    });
-  }, [userFilter, page]);
+    discoverMovies({ genres, providers, release_year }, page, user.uid).then(
+      (res) => {
+        setStack(res.results && res.results.length ? res.results : null);
+        setPage(res.page + 1);
+      }
+    );
+  }, [genres, providers, release_year, page]);
 
   const pop = (array) => {
     return array.filter((_, index) => {
@@ -52,7 +61,7 @@ const MoviesCards = ({ user }) => {
     storeMovie(item);
   };
 
-  if (discoverLoading || filterLoading)
+  if (discoverLoading)
     return (
       <div className="w-full h-full overflow-hidden flex justify-center items-center ">
         Loading...

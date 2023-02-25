@@ -56,8 +56,6 @@ export async function getServerSideProps(context) {
   const { uid } = context.req.cookies;
   //const { getUsersMoviesData } = useFireStore();
 
-  console.log("render", uid);
-
   if (!uid) return { props: {} };
   const moviesData = await FireStoreService.getUsersMoviesData(uid);
 
