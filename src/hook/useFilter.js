@@ -11,6 +11,7 @@ export function useFilter() {
   const { getUserFilter, updateUserFilter } = useFireStore();
 
   const [userFilter, setUserFilter] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState(false);
 
   const { minReleaseYear, maxReleaseYear } = {
@@ -19,17 +20,21 @@ export function useFilter() {
   };
 
   useEffect(() => {
-    getUserFilter(user.uid).then((data) => {
-      if (data.release_year) {
-        setUserFilter(data);
-      } else {
-        setUserFilter({
-          ...data,
-          release_year: { from: minReleaseYear, to: maxReleaseYear },
-        });
-      }
-    });
-  }, []);
+    if (user) {
+      setLoading(true);
+      getUserFilter(user.uid).then((data) => {
+        if (data.release_year) {
+          setUserFilter(data);
+        } else {
+          setUserFilter({
+            ...data,
+            release_year: { from: minReleaseYear, to: maxReleaseYear },
+          });
+        }
+        setLoading(false);
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     if (updating) {
@@ -41,6 +46,7 @@ export function useFilter() {
   return {
     userFilter,
     setUserFilter,
+    loading,
     updating,
     setUpdating,
     minReleaseYear,

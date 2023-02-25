@@ -1,6 +1,14 @@
 import { getApp, getFirestore } from "../config/firebase.config.js";
 
-import { collection, getDocs, setDoc, getDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  setDoc,
+  getDoc,
+  doc,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
 class FireStoreService {
   constructor(fireStore) {
     this.db = fireStore;
@@ -27,7 +35,7 @@ class FireStoreService {
     try {
       const docRef = doc(this.db, "users", uid);
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
+      if (docSnap.exists() && docSnap.data()) {
         return docSnap.data();
       } else {
         return null;
@@ -41,7 +49,7 @@ class FireStoreService {
       const docRef = doc(this.db, "users", uid);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
-        if (docSnap.data().filters) {
+        if (docSnap.data().filters && docSnap.data().filters) {
           return docSnap.data().filters;
         }
         return {};
@@ -57,6 +65,57 @@ class FireStoreService {
     try {
       const docRef = doc(this.db, "users", uid);
       await setDoc(docRef, { filters: { ...filterData } }, { merge: true });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }
+
+  async getUsersMovies(uid) {
+    try {
+      const docRef = doc(this.db, "users", uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists() && docSnap.data().movies) {
+        return docSnap.data().movies;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }
+
+  async addMovieToUser(uid, movie) {
+    try {
+      const docRef = doc(this.db, "users", uid);
+      await updateDoc(docRef, {
+        movies: arrayUnion(movie.id),
+      });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }
+  async storeMovie(movie) {
+    try {
+      await setDoc(doc(this.db, "movies", movie.id.toString()), {
+        ...movie,
+      });
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }
+
+  async getUsersMoviesData(uid) {
+    try {
+      const movies = await this.getUsersMovies(uid);
+      const colRef = collection(this.db, "movies");
+      const moviesData = await getDocs(colRef);
+      const data = [];
+      moviesData.forEach((doc) => {
+        if (movies.includes(doc.data().id)) {
+          data.push(doc.data());
+        }
+      });
+      return data;
     } catch (e) {
       console.error("Error adding document: ", e);
     }

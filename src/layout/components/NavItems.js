@@ -4,10 +4,9 @@ import { NAV_ITEMS } from "../../config/constants";
 export default function NavItems() {
   const items = NAV_ITEMS;
   const mappedItems = items.map((item) => (
-    <Link href={item.url}>
+    <Link href={item.url} key={item.label}>
       <div
         className="flex hover:bg-red-500 hover:text-white rounded-3xl flex-grow  justify-center items-center cursor-pointer "
-        key={item.label}
       >
         {item.label}
       </div>

@@ -2,7 +2,6 @@ import { withProtected } from "../../src/hook/route";
 import styles from "../../styles/misc/card.module.css";
 import ProfileData from "../../components/User/ProfileData";
 import UserFilter from "../../components/User/UserFilter";
-import { FilterContextProvider } from "../../src/hook/useFilter";
 
 function UserPage({ auth }) {
   const { user } = auth;
@@ -16,9 +15,8 @@ function UserPage({ auth }) {
       <div>
         <hr className="border-gray-400" />
       </div>
-      <FilterContextProvider>
-        <UserFilter user={user} />
-      </FilterContextProvider>
+
+      <UserFilter user={user} />
     </div>
   );
 }

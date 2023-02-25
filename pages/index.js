@@ -1,14 +1,8 @@
 import { withProtected } from "../src/hook/route";
-import { BiCameraMovie } from "react-icons/bi";
-import ComingSoon from "../components/misc/ComingSoon";
+import MoviesCards from "../components/MovieCard/MovieCards";
 
 function Main({ auth }) {
-  return (
-    <ComingSoon
-      title="BingeBuddies"
-      shortDescription="BingeBuddies is launching very soon."
-      longDescription="Check back regularly for updates."
-    />
-  );
+  const { user } = auth;
+  return <MoviesCards user={user} />;
 }
 export default withProtected(Main);
