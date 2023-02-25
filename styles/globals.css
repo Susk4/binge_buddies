@@ -26,3 +26,24 @@ button:focus {
 .range-slider__thumb {
   background-color: #7f1d1d !important;
 }
+
+.binge-select__menu {
+  z-index: 4 !important;
+}
+
+.binge-select__indicator {
+  color: rgb(127 29 29) !important;
+  cursor: pointer;
+}
+.binge-select__indicator:hover {
+  color: #000 !important;
+}
+
+.binge-select__multi-value {
+  background-color: rgb(127 29 29) !important;
+  color: white !important;
+  cursor: pointer;
+}
+.binge-select__multi-value__label {
+  color: white !important;
+}

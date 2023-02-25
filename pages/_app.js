@@ -1,5 +1,4 @@
 import "../styles/globals.css";
-import "../styles/bingeSelect/bingeSelect.css";
 
 import AppLayout from "../src/layout/AppLayout";
 import AuthStateChanged from "../src/layout/AuthStateChanged";
