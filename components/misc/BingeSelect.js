@@ -14,6 +14,7 @@ const BingeSelect = (props) => {
       menuPlacement="auto"
       className="binge-select-container"
       classNamePrefix="binge-select"
+      isSearchable={false}
     />
   );
 };
