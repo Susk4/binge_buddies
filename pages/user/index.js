@@ -9,7 +9,7 @@ function UserPage({ auth }) {
   if (!user) return <div>Loading</div>;
   return (
     <div
-      className={`m-2 p-2 ${styles.card} flex-shrink basis-auto min-h-0 rounded-xl flex flex-col gap-2 overflow-auto`}
+      className={`m-2 p-2 ${styles.card} flex-grow  max-w-lg rounded-xl flex flex-col gap-2 overflow-auto`}
     >
       <ProfileData user={user} />
       <div>

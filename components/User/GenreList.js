@@ -1,9 +1,10 @@
 import useTmdb from "../../src/hook/useTmdb";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { GenreContext } from "../../src/hook/useFilter";
 import { useContext } from "react";
-import OptionsWrapper from "./OptionsWrapper";
+
 import UserFilterRowWrapper from "./UserFilterRowWrapper";
+import BingeSelect from "../misc/BingeSelect";
 
 const GenreList = () => {
   const { genres, setGenres } = useContext(GenreContext);
@@ -13,38 +14,34 @@ const GenreList = () => {
 
   useEffect(() => {
     getGenres().then((data) => {
-      setGenreList(data.genres);
+      setGenreList(
+        data.genres.map(({ name, id }) => ({
+          value: id,
+          label: name,
+        }))
+      );
     });
   }, []);
 
-  const handleGenreChange = (id) => {
-    if (genres?.some((ug) => ug == id)) {
-      setGenres(genres.filter((ug) => ug != id));
-    } else {
-      setGenres([...genres, id]);
-    }
+  const handleGenreChange = (selectedGenres) => {
+    setGenres(selectedGenres.map((genre) => genre.value));
   };
-  if (!genres) return <>Loading...</>;
+  const selectedOptions = useMemo(
+    () =>
+      genreList.filter((genreListItem) =>
+        genres?.some((genre) => genre == genreListItem.value)
+      ),
+    [genres, genreList]
+  );
   return (
     <UserFilterRowWrapper title="Genres">
-      <OptionsWrapper>
-        {genreList.map(({ name, id }) => (
-          <div key={id} className="gap-1 flex">
-            <input
-              type="checkbox"
-              id={name}
-              name={name}
-              value={name}
-              style={{ accentColor: "#7f1d1d" }}
-              checked={genres?.some((ug) => ug == id) || false}
-              onChange={() => handleGenreChange(id)}
-            />
-            <label htmlFor={name} className="">
-              {name}
-            </label>
-          </div>
-        ))}
-      </OptionsWrapper>
+      <BingeSelect
+        isDisabled={!genres}
+        isLoading={!genres}
+        options={genreList}
+        value={selectedOptions}
+        onChange={handleGenreChange}
+      />
     </UserFilterRowWrapper>
   );
 };

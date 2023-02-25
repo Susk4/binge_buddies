@@ -22,8 +22,8 @@ function Likes({ auth, movies }) {
       {movies.map((movie) => {
         return (
           <div key={movie.id}>
-            <div className={`flex flex-row items-center  gap-2`}>
-              <div className="flex-shrink-0 block relative w-56 h-56">
+            <div className="flex flex-row items-center  gap-2">
+              <div className="flex-shrink-0 block relative  w-44 h-56">
                 <Image
                   src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
                   layout="fill"

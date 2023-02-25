@@ -20,6 +20,7 @@
     "react-dom": "18.1.0",
     "react-icons": "^4.7.1",
     "react-range-slider-input": "^3.0.6",
+    "react-select": "^5.7.0",
     "react-tinder-card": "^1.6.2"
   },
   "engines": {

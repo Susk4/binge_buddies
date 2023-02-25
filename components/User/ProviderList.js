@@ -3,20 +3,20 @@ import { ProviderContext } from "../../src/hook/useFilter";
 import { useContext, useMemo } from "react";
 
 import { useState, useEffect } from "react";
-import OptionsWrapper from "./OptionsWrapper";
 import UserFilterRowWrapper from "./UserFilterRowWrapper";
+import BingeSelect from "../misc/BingeSelect";
 
 const ProviderList = () => {
   const { providers, setProviders } = useContext(ProviderContext);
   const { getProviders } = useTmdb();
-  const [supportedProviders, setSupportedProviders] = useState(null);
+  const [supportedProviders, setSupportedProviders] = useState([]);
 
   const providerList = [
-    "Amazon Prime Video",
-    "Disney Plus",
-    "HBO Max",
-    "Hulu",
-    "Netflix",
+    { value: 0, label: "Amazon Prime Video" },
+    { value: 1, label: "Disney Plus" },
+    { value: 2, label: "HBO Max" },
+    { value: 3, label: "Hulu" },
+    { value: 4, label: "Netflix" },
   ];
   useEffect(() => {
     getProviders().then((data) => {
@@ -24,49 +24,43 @@ const ProviderList = () => {
     });
   }, []);
 
-  const isSelected = (providerName) => {
-    const providerId = supportedProviders?.filter(
-      (provider) => provider.provider_name == providerName
-    )[0].provider_id;
-    return providers?.includes(providerId);
-  };
-
-  const handleOnChange = (providerName) => {
+  const handleOnChange = (selectedProviders) => {
     const providerIds = supportedProviders
-      ?.filter((provider) => provider.provider_name == providerName)
+      ?.filter((provider) =>
+        selectedProviders.some(
+          (selectedProvider) =>
+            selectedProvider.label === provider.provider_name
+        )
+      )
       .map((sp) => sp.provider_id);
-    if (providers.some((up) => providerIds.includes(up))) {
-      setProviders(providers.filter((up) => !providerIds.includes(up)));
-    } else {
-      setProviders([...(providers || []), ...providerIds]);
-    }
+    setProviders(providerIds);
   };
-
-  if (!providers) return <>Loading...</>;
+  const selectedOptions = useMemo(
+    () =>
+      providerList.filter((providerListItem) =>
+        supportedProviders
+          ?.filter((supportedProvider) =>
+            providers?.some(
+              (provider) => provider === supportedProvider.provider_id
+            )
+          )
+          ?.some(
+            (filteredSupportedProvider) =>
+              providerListItem.label === filteredSupportedProvider.provider_name
+          )
+      ),
+    [providers, providerList]
+  );
 
   return (
     <UserFilterRowWrapper title="Providers">
-      <OptionsWrapper>
-        {providerList.map((provider, index) => (
-          <div key={index} className="gap-1 flex">
-            <input
-              type="checkbox"
-              id={provider}
-              name={provider}
-              value={provider}
-              style={{ accentColor: "#7f1d1d" }}
-              checked={isSelected(provider) || false}
-              onChange={() => handleOnChange(provider)}
-            />
-            <label
-              htmlFor={provider}
-              className="flex items-center overflow-hidden"
-            >
-              {provider}
-            </label>
-          </div>
-        ))}
-      </OptionsWrapper>
+      <BingeSelect
+        isDisabled={!providers}
+        isLoading={!providers}
+        options={providerList}
+        value={selectedOptions}
+        onChange={handleOnChange}
+      />
     </UserFilterRowWrapper>
   );
 };
