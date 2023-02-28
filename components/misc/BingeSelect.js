@@ -15,6 +15,7 @@ const BingeSelect = (props) => {
       className="binge-select-container"
       classNamePrefix="binge-select"
       isSearchable={false}
+      blurInputOnSelect={true}
     />
   );
 };
