@@ -6,7 +6,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 a {
@@ -32,6 +32,7 @@ button:focus {
   cursor: pointer !important;
   border-radius: 12px !important;
   border: none !important;
+  overflow: hidden;
 }
 .binge-select__option {
   cursor: pointer !important;
