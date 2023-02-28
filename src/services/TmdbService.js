@@ -42,13 +42,13 @@ class TmdbService {
       .map((g) => g.id);
 
     let url = this.discoverUrl;
-    if (filter.genres.length === 0 || filter.providers.length === 0) {
-      console.log("no genres or providers");
-      return [];
+    if (filter.genres.length > 0) {
+      url += `&without_genres=${exludeGenres.join(",")}`;
     }
 
-    url += `&without_genres=${exludeGenres.join(",")}`;
-    url += `&with_watch_providers=${filter.providers.join(",")}`;
+    if (filter.providers.length > 0) {
+      url += `&with_watch_providers=${filter.providers.join(",")}`;
+    }
     url += `&primary_release_date.gte=${filter.release_year.from}`;
     url += `&primary_release_date.lte=${filter.release_year.to}`;
     url += `&page=${page}`;
