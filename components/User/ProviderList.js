@@ -55,6 +55,8 @@ const ProviderList = () => {
   return (
     <UserFilterRowWrapper title="Providers">
       <BingeSelect
+        isMulti={true}
+        isSearchable={false}
         isDisabled={!providers}
         isLoading={!providers}
         options={providerList}

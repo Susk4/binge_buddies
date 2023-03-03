@@ -36,6 +36,8 @@ const GenreList = () => {
   return (
     <UserFilterRowWrapper title="Genres">
       <BingeSelect
+        isMulti={true}
+        isSearchable={false}
         isDisabled={!genres}
         isLoading={!genres}
         options={genreList}
