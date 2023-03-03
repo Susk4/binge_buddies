@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.12",
     "@next/font": "^13.0.7",
     "@react-spring/web": "^9.5.5",
     "cookies-next": "^2.1.1",
