@@ -8,6 +8,10 @@ import {
   doc,
   updateDoc,
   arrayUnion,
+  query,
+  where,
+  deleteDoc,
+  addDoc,
 } from "firebase/firestore";
 class FireStoreService {
   constructor(fireStore) {
@@ -121,18 +125,176 @@ class FireStoreService {
     }
   }
 
-  async getUsers() {
+  async getContacts(uid) {
     try {
-      const snapShot = await getDocs(collection(this.db, "users"));
-      const users = [];
-      snapShot.forEach((doc) => {
-        const user = { uid: doc.id, ...doc.data() };
-        users.push(user);
+      const userAsContact = await getDocs(
+        query(
+          collection(this.db, "users_contacts"),
+          where("contact", "==", uid),
+          where("accepted", "==", true)
+        )
+      );
+      const userAsUser = await getDocs(
+        query(
+          collection(this.db, "users_contacts"),
+          where("user", "==", uid),
+          where("accepted", "==", true)
+        )
+      );
+
+      const contacts = this.getContactsSet(userAsContact, userAsUser);
+
+      const users = await getDocs(collection(this.db, "users"));
+
+      const data = [];
+      users.forEach((user) => {
+        if (contacts.has(user.id)) {
+          data.push({ id: user.id, ...user.data() });
+        }
       });
-      return users;
+      return data;
     } catch (e) {
-      console.error("Error adding document: ", e);
+      console.error("Error getting contacts: ", e);
     }
+  }
+
+  async getPossibleContacts(uid) {
+    try {
+      const users = await getDocs(collection(this.db, "users"));
+      const userAsContact = await getDocs(
+        query(
+          collection(this.db, "users_contacts"),
+          where("contact", "==", uid)
+        )
+      );
+      const userAsUser = await getDocs(
+        query(collection(this.db, "users_contacts"), where("user", "==", uid))
+      );
+
+      const contacts = this.getContactsSet(userAsContact, userAsUser);
+
+      const data = [];
+      users.forEach((user) => {
+        if (!contacts.has(user.id)) {
+          data.push({ id: user.id, ...user.data() });
+        }
+      });
+      return data;
+    } catch (e) {
+      console.error("Error getting possible contacts: ", e);
+    }
+  }
+  async getContactRequests(uid) {
+    try {
+      const contactRequests = await getDocs(
+        query(
+          collection(this.db, "users_contacts"),
+          where("contact", "==", uid),
+          where("accepted", "==", false)
+        )
+      );
+      const data = [];
+      contactRequests.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
+
+      const promises = [];
+      data.forEach((contact) => {
+        const docRef = doc(this.db, "users", contact.user);
+        promises.push(getDoc(docRef));
+      });
+
+      const contactRequesters = await Promise.all(promises);
+
+      const contactRequestersData = contactRequesters.map((doc) => {
+        return {
+          id: doc.id,
+          contact_doc_id: data.find((contact) => contact.user === doc.id).id,
+          ...doc.data(),
+        };
+      });
+      return contactRequestersData;
+    } catch (e) {
+      console.error("Error getting contact requests: ", e);
+    }
+  }
+
+  async getContactRequestsSent(uid) {
+    try {
+      const contactRequests = await getDocs(
+        query(
+          collection(this.db, "users_contacts"),
+          where("user", "==", uid),
+          where("accepted", "==", false)
+        )
+      );
+      const data = [];
+      contactRequests.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
+
+      const promises = [];
+      data.forEach((contact) => {
+        const docRef = doc(this.db, "users", contact.contact);
+        promises.push(getDoc(docRef));
+      });
+
+      const contactRequesters = await Promise.all(promises);
+
+      const contactRequestersData = contactRequesters.map((doc) => {
+        return {
+          id: doc.id,
+          contact_doc_id: data.find((contact) => contact.contact === doc.id).id,
+          ...doc.data(),
+        };
+      });
+
+      return contactRequestersData;
+    } catch (e) {
+      console.error("Error getting contact requests: ", e);
+    }
+  }
+
+  async acceptContactRequest(contactId) {
+    try {
+      const docRef = doc(this.db, "users_contacts", contactId);
+      await updateDoc(docRef, {
+        accepted: true,
+      });
+    } catch (e) {
+      console.error("Error accepting contact request ", e);
+    }
+  }
+  async sendContactRequest(uid, contactId) {
+    try {
+      await addDoc(collection(this.db, "users_contacts"), {
+        user: uid,
+        contact: contactId,
+        accepted: false,
+      });
+    } catch (e) {
+      console.error("Error sending contact request: ", e);
+    }
+  }
+
+  async declineContactRequest(contactId) {
+    try {
+      const docRef = doc(this.db, "users_contacts", contactId);
+      await deleteDoc(docRef);
+    } catch (e) {
+      console.error("Error declining contact request ", e);
+    }
+  }
+
+  getContactsSet(contactRequesters, requestedContacts) {
+    const contacts = new Set();
+    contactRequesters.forEach((doc) => {
+      contacts.add(doc.data().user);
+    });
+    requestedContacts.forEach((doc) => {
+      contacts.add(doc.data().contact);
+    });
+    return contacts;
   }
 }
 export default new FireStoreService(getFirestore(getApp()));

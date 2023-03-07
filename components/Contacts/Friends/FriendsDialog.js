@@ -1,51 +1,32 @@
 import BingeDialog from "../../misc/BingeDialog";
 import BingeSelect from "../../misc/BingeSelect";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useFireStore from "../../../src/hook/useFireStore";
 
-const users = [
-  {
-    id: 1,
-    name: "Peter Sagan",
-  },
-
-  {
-    id: 2,
-    name: "Chris Froome",
-  },
-  {
-    id: 3,
-    name: "Geraint Thomas",
-  },
-  {
-    id: 4,
-    name: "Egan Bernal",
-  },
-  {
-    id: 5,
-    name: "Remco Evenepoel",
-  },
-  {
-    id: 6,
-    name: "Tadej Pogacar",
-  },
-  {
-    id: 7,
-    name: "Vincenzo Nibali",
-  },
-  {
-    id: 8,
-    name: "Mikel Landa",
-  },
-];
-const FriendsDialog = ({ isOpen, setIsOpen }) => {
+const FriendsDialog = ({ isOpen, setIsOpen, user }) => {
   const [selectedUser, setSelectedUser] = useState(null);
+  const [users, setUsers] = useState([]);
+  const [error, setError] = useState(null);
+  const { sendContactRequest, getPossibleContacts, loading } = useFireStore();
+
+  useEffect(() => {
+    getPossibleContacts(user.uid).then((data) => {
+      setUsers(data.map((item) => ({ id: item.id, label: item.name })));
+    });
+  }, []);
 
   const handleOnChange = (e) => {
     setSelectedUser(e);
   };
 
   const onSubmit = () => {
-    console.log(selectedUser);
+    if (!selectedUser || selectedUser.id === "") {
+      setError("Please select a user.");
+      return;
+    } else {
+      sendContactRequest(user.uid, selectedUser?.id);
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -55,19 +36,19 @@ const FriendsDialog = ({ isOpen, setIsOpen }) => {
       callback={onSubmit}
       title="Add friend"
       description="Please select the user below you want to add as a friend."
+      error={error}
     >
       <div className="flex flex-row items-center justify-between w-full">
         <span>User:</span>
         <BingeSelect
+          isLoading={loading}
+          isDisabled={loading}
           isMulti={false}
           isSearchable={true}
           onChange={handleOnChange}
           value={selectedUser}
           className="w-3/5"
-          options={users.map((item) => ({
-            label: item.name,
-            value: item.id,
-          }))}
+          options={users}
         />
       </div>
     </BingeDialog>

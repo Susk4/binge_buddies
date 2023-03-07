@@ -7,10 +7,10 @@ const BingeDialog = ({
   title,
   description,
   children,
+  error,
 }) => {
   const handleSubmit = () => {
     callback();
-    setIsOpen(false);
   };
 
   return (
@@ -29,7 +29,9 @@ const BingeDialog = ({
             <Dialog.Description>{description}</Dialog.Description>
             {children}
           </div>
-
+          {error && (
+            <div className=" text-center p-2 text-red-500">{error}</div>
+          )}
           <div
             className="flex flex-row w-full  overflow-hidden text-white"
             style={{

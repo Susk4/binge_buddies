@@ -2,7 +2,14 @@ import React from "react";
 import styles from "../../../styles/misc/card.module.css";
 import Image from "next/image";
 
-const GroupCard = ({ group }) => {
+const PendingGroupCard = ({ group }) => {
+  const handleAccept = () => {
+    console.log("Accept");
+  };
+
+  const handleReject = () => {
+    console.log("Reject");
+  };
   return (
     <div
       key={group.id}
@@ -19,13 +26,26 @@ const GroupCard = ({ group }) => {
               alt="avatar"
               className="rounded-full"
             />
-
             <p>{member.name}</p>
           </div>
         ))}
+      </div>
+      <div className="flex justify-center gap-2">
+        <button
+          className="bg-green-500 hover:bg-green-700 text-white rounded-xl p-2"
+          onClick={handleAccept}
+        >
+          Accept
+        </button>
+        <button
+          className="bg-red-500 hover:bg-red-700 text-white rounded-xl p-2"
+          onClick={handleReject}
+        >
+          Reject
+        </button>
       </div>
     </div>
   );
 };
 
-export default GroupCard;
+export default PendingGroupCard;

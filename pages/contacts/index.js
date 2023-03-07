@@ -89,6 +89,7 @@ const groups = [
 ];
 
 function Groups({ auth }) {
+  const { user } = auth;
   const [tab, setTab] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -119,7 +120,7 @@ function Groups({ auth }) {
         {tab === 0 ? (
           <GroupList groups={groups} />
         ) : (
-          <FriendList friends={users} />
+          <FriendList friends={users} user={user} />
         )}
       </div>
 
@@ -131,7 +132,7 @@ function Groups({ auth }) {
           >
             Create Group
           </button>
-          <GroupsDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+          {isOpen && <GroupsDialog isOpen={isOpen} setIsOpen={setIsOpen} />}
         </>
       ) : (
         <>
@@ -141,7 +142,9 @@ function Groups({ auth }) {
           >
             Add Friend
           </button>
-          <FriendsDialog isOpen={isOpen} setIsOpen={setIsOpen} />
+          {isOpen && (
+            <FriendsDialog isOpen={isOpen} setIsOpen={setIsOpen} user={user} />
+          )}
         </>
       )}
     </div>

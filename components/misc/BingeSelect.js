@@ -27,6 +27,7 @@ const BingeSelect = (props) => {
       isDisabled={props.isDisabled}
       onChange={handleOnChange}
       value={props.value}
+      getOptionValue={(option) => option.label}
       menuPlacement="auto"
       className={`binge-select-container ${props.className}`}
       classNamePrefix="binge-select"

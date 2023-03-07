@@ -10,8 +10,10 @@ export default function useFireStore() {
     }
     await FireStoreService.addUser(user, filterData);
   };
-  const getUsers = async () => {
-    const users = await FireStoreService.getUsers();
+  const getPossibleContacts = async (uid) => {
+    setLoading(true);
+    const users = await FireStoreService.getPossibleContacts(uid);
+    setLoading(false);
     return users;
   };
 
@@ -48,10 +50,49 @@ export default function useFireStore() {
     return usersMovies;
   };
 
+  const getContactRequests = async (uid) => {
+    setLoading(true);
+    const contactRequests = await FireStoreService.getContactRequests(uid);
+    setLoading(false);
+    return contactRequests;
+  };
+
+  const getContacts = async (uid) => {
+    setLoading(true);
+    const contacts = await FireStoreService.getContacts(uid);
+    setLoading(false);
+    return contacts;
+  };
+
+  const getContactRequestsSent = async (uid) => {
+    setLoading(true);
+    const contactRequestsSent = await FireStoreService.getContactRequestsSent(
+      uid
+    );
+    setLoading(false);
+    return contactRequestsSent;
+  };
+
+  const acceptContactRequest = async (contact) => {
+    await FireStoreService.acceptContactRequest(contact);
+  };
+  const declineContactRequest = async (contact) => {
+    await FireStoreService.declineContactRequest(contact);
+  };
+  const sendContactRequest = async (uid, contact) => {
+    await FireStoreService.sendContactRequest(uid, contact);
+  };
+
   return {
     loading,
     addUser,
-    getUsers,
+    getPossibleContacts,
+    getContactRequests,
+    getContacts,
+    getContactRequestsSent,
+    acceptContactRequest,
+    declineContactRequest,
+    sendContactRequest,
     getUser,
     getUserFilter,
     updateUserFilter,
