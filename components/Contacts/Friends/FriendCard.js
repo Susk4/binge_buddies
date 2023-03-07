@@ -13,6 +13,7 @@ const GroupCard = ({ friend }) => {
         height={50}
         alt="avatar"
         className="rounded-full"
+        unoptimized
       />
       <h2 className="text-xl font-bold">{friend.name}</h2>
     </div>

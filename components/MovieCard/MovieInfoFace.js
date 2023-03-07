@@ -21,6 +21,7 @@ const MovieInfoFace = ({ children, onClick, backgroundURL }) => {
           layout="fill"
           priority
           unoptimized
+          alt="Movie Poster"
         />
       </div>
       <div className="absolute h-full w-full">{children}</div>

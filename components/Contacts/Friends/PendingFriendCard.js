@@ -14,6 +14,7 @@ const PendingFriendCard = ({ friend, handleAccept, handleDecline }) => {
           height={50}
           alt="avatar"
           className="rounded-full"
+          unoptimized
         />
         <div className="text-xl">
           <span className="font-bold">{friend.name}</span>

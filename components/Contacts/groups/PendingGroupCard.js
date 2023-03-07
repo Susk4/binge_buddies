@@ -25,6 +25,7 @@ const PendingGroupCard = ({ group }) => {
               height={50}
               alt="avatar"
               className="rounded-full"
+              unoptimized
             />
             <p>{member.name}</p>
           </div>

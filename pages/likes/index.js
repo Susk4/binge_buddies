@@ -30,6 +30,7 @@ function Likes({ auth, movies }) {
                   priority
                   objectFit="contain"
                   unoptimized
+                  alt="Movie Poster"
                 />
               </div>
 
