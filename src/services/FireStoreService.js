@@ -175,7 +175,7 @@ class FireStoreService {
 
       const data = [];
       users.forEach((user) => {
-        if (!contacts.has(user.id)) {
+        if (user.id != uid && !contacts.has(user.id)) {
           data.push({ id: user.id, ...user.data() });
         }
       });
