@@ -23,7 +23,6 @@ const MoviesCards = ({ user }) => {
   useEffect(() => {
     if (genres && providers && release_year) {
       discover();
-      console.log("first fetch");
     }
   }, [genres, providers, release_year]);
 
@@ -31,7 +30,6 @@ const MoviesCards = ({ user }) => {
   useEffect(() => {
     if (stack && stack.length === 0) {
       discover();
-      console.log("fetch if empty");
     }
   }, [stack]);
 
