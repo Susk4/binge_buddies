@@ -8,6 +8,7 @@ const BingeDialog = ({
   description,
   children,
   error,
+  loading,
 }) => {
   const handleSubmit = () => {
     callback();
@@ -39,17 +40,18 @@ const BingeDialog = ({
             }}
           >
             <button
+              disabled={loading}
               onClick={() => setIsOpen(false)}
               className="p-2 bg-red-500 hover:bg-red-700  flex-grow"
             >
-              Cancel
+              {loading ? "Loading..." : "Cancel"}
             </button>
             <button
+              disabled={loading}
               onClick={() => handleSubmit()}
               className="p-2 bg-blue-500 hover:bg-blue-700  flex-grow"
             >
-              {" "}
-              Submit
+              {loading ? "Loading..." : "Submit"}
             </button>
           </div>
         </Dialog.Panel>

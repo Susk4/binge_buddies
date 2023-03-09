@@ -19,12 +19,12 @@ const FriendsDialog = ({ isOpen, setIsOpen, user }) => {
     setSelectedUser(e);
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!selectedUser || selectedUser.id === "") {
       setError("Please select a user.");
       return;
     } else {
-      sendContactRequest(user.uid, selectedUser?.id);
+      await sendContactRequest(user.uid, selectedUser?.id);
       setIsOpen(false);
     }
   };
@@ -34,6 +34,7 @@ const FriendsDialog = ({ isOpen, setIsOpen, user }) => {
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       callback={onSubmit}
+      loading={loading}
       title="Add friend"
       description="Please select the user below you want to add as a friend."
       error={error}

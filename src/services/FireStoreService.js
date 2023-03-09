@@ -48,6 +48,22 @@ class FireStoreService {
       console.error("Error adding document: ", e);
     }
   }
+  async getUsers(uids) {
+    try {
+      const usersData = await getDocs(collection(this.db, "users"));
+
+      const data = [];
+      usersData.forEach((doc) => {
+        if (uids.includes(doc.id)) {
+          data.push(doc.data());
+        }
+      });
+      return data;
+    } catch (e) {
+      console.error("Error getting users: ", e);
+    }
+  }
+
   async getUserFilter(uid) {
     try {
       const docRef = doc(this.db, "users", uid);
@@ -295,6 +311,82 @@ class FireStoreService {
       contacts.add(doc.data().contact);
     });
     return contacts;
+  }
+
+  async createGroup(name, description, userIds, creator) {
+    try {
+      const initializedUsers = userIds.map((id) => {
+        return { id, accepted: false };
+      });
+      const docRef = await addDoc(collection(this.db, "groups"), {
+        name,
+        description,
+        users: initializedUsers,
+        creator,
+      });
+      return docRef.id;
+    } catch (e) {
+      console.error("Error creating group: ", e);
+    }
+  }
+
+  async getPendingGroups(uid) {
+    try {
+      const groups = await getDocs(
+        query(
+          collection(this.db, "groups"),
+          where("users", "array-contains", { id: uid, accepted: false })
+        )
+      );
+      const data = [];
+      groups.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
+      return data;
+    } catch (e) {
+      console.error("Error getting pending groups: ", e);
+    }
+  }
+  async getSentGroupRequests(uid) {
+    try {
+      const groups = await getDocs(
+        query(collection(this.db, "groups"), where("creator", "==", uid))
+      );
+      const data = [];
+      groups.forEach((doc) => {
+        if (doc.data().users.some((user) => !user.accepted)) {
+          data.push({ id: doc.id, ...doc.data() });
+        }
+      });
+      return data;
+    } catch (e) {
+      console.error("Error getting sent group requests: ", e);
+    }
+  }
+
+  async getGroups(uid) {
+    try {
+      const joinedGroups = await getDocs(
+        query(
+          collection(this.db, "groups"),
+          where("users", "array-contains", { id: uid, accepted: true })
+        )
+      );
+      const createdGroups = await getDocs(
+        query(collection(this.db, "groups"), where("creator", "==", uid))
+      );
+      const data = [];
+      joinedGroups.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
+
+      createdGroups.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
+      return data;
+    } catch (e) {
+      console.error("Error getting groups: ", e);
+    }
   }
 }
 export default new FireStoreService(getFirestore(getApp()));

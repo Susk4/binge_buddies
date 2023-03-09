@@ -18,8 +18,17 @@ export default function useFireStore() {
   };
 
   const getUser = async (uid) => {
+    setLoading(true);
     const user = await FireStoreService.getUser(uid);
+    setLoading(false);
     return user;
+  };
+
+  const getUsers = async (uids) => {
+    setLoading(true);
+    const users = await FireStoreService.getUsers(uids);
+    setLoading(false);
+    return users;
   };
 
   const getUserFilter = async (uid) => {
@@ -83,6 +92,32 @@ export default function useFireStore() {
     await FireStoreService.sendContactRequest(uid, contact);
   };
 
+  const createGroup = async (name, description, users, creator) => {
+    setLoading(true);
+    const groupId = await FireStoreService.createGroup(
+      name,
+      description,
+      users,
+      creator
+    );
+    setLoading(false);
+    return groupId;
+  };
+
+  const getPendingGroups = async (uid) => {
+    setLoading(true);
+    const pendingGroups = await FireStoreService.getPendingGroups(uid);
+    setLoading(false);
+    return pendingGroups;
+  };
+
+  const getSentGroupRequests = async (uid) => {
+    setLoading(true);
+    const sentGroupRequests = await FireStoreService.getSentGroupRequests(uid);
+    setLoading(false);
+    return sentGroupRequests;
+  };
+
   return {
     loading,
     addUser,
@@ -93,7 +128,11 @@ export default function useFireStore() {
     acceptContactRequest,
     declineContactRequest,
     sendContactRequest,
+    createGroup,
+    getPendingGroups,
+    getSentGroupRequests,
     getUser,
+    getUsers,
     getUserFilter,
     updateUserFilter,
     addMovieToUser,

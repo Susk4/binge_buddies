@@ -117,11 +117,7 @@ function Groups({ auth }) {
       </div>
 
       <div className="p-2 flex-grow flex-shrink basis-0 min-h-0 overflow-auto">
-        {tab === 0 ? (
-          <GroupList groups={groups} />
-        ) : (
-          <FriendList friends={users} user={user} />
-        )}
+        {tab === 0 ? <GroupList user={user} /> : <FriendList user={user} />}
       </div>
 
       {tab === 0 ? (
@@ -132,7 +128,9 @@ function Groups({ auth }) {
           >
             Create Group
           </button>
-          {isOpen && <GroupsDialog isOpen={isOpen} setIsOpen={setIsOpen} />}
+          {isOpen && (
+            <GroupsDialog isOpen={isOpen} setIsOpen={setIsOpen} user={user} />
+          )}
         </>
       ) : (
         <>

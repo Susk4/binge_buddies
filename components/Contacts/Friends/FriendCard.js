@@ -11,8 +11,8 @@ const GroupCard = ({ friend }) => {
         src={friend.photo_url}
         width={50}
         height={50}
-        alt="avatar"
         className="rounded-full"
+        alt="Profile Picture"
         unoptimized
       />
       <h2 className="text-xl font-bold">{friend.name}</h2>

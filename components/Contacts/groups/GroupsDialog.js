@@ -1,47 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BingeDialog from "../../misc/BingeDialog";
 import BingeSelect from "../../misc/BingeSelect";
+import useFireStore from "../../../src/hook/useFireStore";
 
-const users = [
-  {
-    id: 1,
-    name: "Peter Sagan",
-  },
-
-  {
-    id: 2,
-    name: "Chris Froome",
-  },
-  {
-    id: 3,
-    name: "Geraint Thomas",
-  },
-  {
-    id: 4,
-    name: "Egan Bernal",
-  },
-  {
-    id: 5,
-    name: "Remco Evenepoel",
-  },
-  {
-    id: 6,
-    name: "Tadej Pogacar",
-  },
-  {
-    id: 7,
-    name: "Vincenzo Nibali",
-  },
-  {
-    id: 8,
-    name: "Mikel Landa",
-  },
-];
-
-const GroupsDialog = ({ isOpen, setIsOpen }) => {
+const GroupsDialog = ({ isOpen, setIsOpen, user }) => {
   const [selectedUsers, setSelectedUsers] = useState(null);
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
+  const [friends, setFriends] = useState([]);
+  const [error, setError] = useState(null);
+  const { getContacts, loading, createGroup } = useFireStore();
+
+  useEffect(() => {
+    getContacts(user.uid).then((data) => {
+      setFriends(data);
+    });
+  }, []);
 
   const handleOnChange = (e) => {
     console.log(e);
@@ -49,9 +23,25 @@ const GroupsDialog = ({ isOpen, setIsOpen }) => {
   };
 
   const onSubmit = () => {
-    console.log("Group Name: ", groupName);
-    console.log("Group Description: ", groupDescription);
-    console.log("Group Members: ", selectedUsers);
+    if (
+      !groupName ||
+      groupName === "" ||
+      !groupDescription ||
+      groupDescription === "" ||
+      !selectedUsers ||
+      selectedUsers.length === 0
+    ) {
+      setError("Please fill out all of the fields.");
+    } else {
+      createGroup(
+        groupName,
+        groupDescription,
+        selectedUsers.map((user) => user.value),
+        user.uid
+      );
+
+      setIsOpen(false);
+    }
   };
 
   return (
@@ -60,6 +50,8 @@ const GroupsDialog = ({ isOpen, setIsOpen }) => {
       setIsOpen={setIsOpen}
       callback={onSubmit}
       title="Create Group"
+      loading={loading}
+      error={error}
       description="Please fill out the form below to create a new group."
     >
       <div className="flex flex-col gap-2  items-center justify-between w-full">
@@ -90,11 +82,13 @@ const GroupsDialog = ({ isOpen, setIsOpen }) => {
           <div>
             <BingeSelect
               isMulti={true}
+              isLoading={loading}
+              isDisabled={loading}
               isSearchable={true}
               onChange={handleOnChange}
               className="w-full"
               value={selectedUsers}
-              options={users.map((item) => ({
+              options={friends.map((item) => ({
                 label: item.name,
                 value: item.id,
               }))}
