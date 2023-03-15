@@ -41,7 +41,9 @@ export default function useFireStore() {
   };
 
   const getUsersMovies = async (uid) => {
+    setLoading(true);
     const usersMovies = await FireStoreService.getUsersMovies(uid);
+    setLoading(false);
     return usersMovies;
   };
 
@@ -111,11 +113,37 @@ export default function useFireStore() {
     return pendingGroups;
   };
 
+  const getAllPendingGroups = async (uid) => {
+    setLoading(true);
+    const pendingGroups = await FireStoreService.getAllPendingGroups(uid);
+    setLoading(false);
+    return pendingGroups;
+  };
+
   const getSentGroupRequests = async (uid) => {
     setLoading(true);
     const sentGroupRequests = await FireStoreService.getSentGroupRequests(uid);
     setLoading(false);
     return sentGroupRequests;
+  };
+  const getGroups = async (uid) => {
+    setLoading(true);
+    const groups = await FireStoreService.getGroups(uid);
+    setLoading(false);
+    return groups;
+  };
+
+  const acceptGroupRequest = async (groupId, userId) => {
+    await FireStoreService.acceptGroupRequest(groupId, userId);
+  };
+  const declineGroupRequest = async (groupId, userId) => {
+    await FireStoreService.declineGroupRequest(groupId, userId);
+  };
+  const getGroupMovies = async (groupId, userId) => {
+    setLoading(true);
+    const groupMovies = await FireStoreService.getGroupMovies(groupId, userId);
+    setLoading(false);
+    return groupMovies;
   };
 
   return {
@@ -131,6 +159,11 @@ export default function useFireStore() {
     createGroup,
     getPendingGroups,
     getSentGroupRequests,
+    getAllPendingGroups,
+    getGroups,
+    acceptGroupRequest,
+    declineGroupRequest,
+    getGroupMovies,
     getUser,
     getUsers,
     getUserFilter,

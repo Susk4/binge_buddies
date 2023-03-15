@@ -24,7 +24,7 @@ class FireStoreService {
         name: user.displayName,
         email: user.email,
         account_created: user.metadata.createdAt,
-        last_ogin: user.metadata.lastLoginAt,
+        last_login: user.metadata.lastLoginAt,
         photo_url: user.photoURL,
         filters: {
           ...filterData,
@@ -39,26 +39,25 @@ class FireStoreService {
     try {
       const docRef = doc(this.db, "users", uid);
       const docSnap = await getDoc(docRef);
-      if (docSnap.exists() && docSnap.data()) {
+      if (docSnap.exists() && docSnap.data() && docSnap.data().name) {
         return docSnap.data();
       } else {
-        return null;
+        return this.getUser(uid);
       }
     } catch (e) {
-      console.error("Error adding document: ", e);
+      console.error("Error getting user: ", e);
     }
   }
   async getUsers(uids) {
     try {
-      const usersData = await getDocs(collection(this.db, "users"));
-
-      const data = [];
-      usersData.forEach((doc) => {
-        if (uids.includes(doc.id)) {
-          data.push(doc.data());
+      const users = [];
+      for (const uid of uids) {
+        const user = await this.getUser(uid);
+        if (user) {
+          users.push(user);
         }
-      });
-      return data;
+      }
+      return users;
     } catch (e) {
       console.error("Error getting users: ", e);
     }
@@ -92,13 +91,12 @@ class FireStoreService {
 
   async getUsersMovies(uid) {
     try {
-      const docRef = doc(this.db, "users", uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists() && docSnap.data().movies) {
-        return docSnap.data().movies;
-      } else {
-        return [];
+      const user = await this.getUser(uid);
+
+      if (user && user.movies) {
+        return user.movies;
       }
+      return [];
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -138,6 +136,31 @@ class FireStoreService {
       return data;
     } catch (e) {
       console.error("Error adding document: ", e);
+    }
+  }
+
+  async getMoviesOfUsers(uids) {
+    try {
+      const movies = [];
+      for (const uid of uids) {
+        const userMovies = await this.getUsersMovies(uid);
+        movies.push(userMovies);
+      }
+      const intersectingMovies = movies.reduce((a, b) =>
+        a.filter((c) => b.includes(c))
+      );
+
+      const colRef = collection(this.db, "movies");
+      const moviesData = await getDocs(colRef);
+      const data = [];
+      moviesData.forEach((doc) => {
+        if (intersectingMovies.includes(doc.data().id)) {
+          data.push(doc.data());
+        }
+      });
+      return data;
+    } catch (e) {
+      console.error("Error getting movies of users document: ", e);
     }
   }
 
@@ -318,6 +341,23 @@ class FireStoreService {
       const initializedUsers = userIds.map((id) => {
         return { id, accepted: false };
       });
+      const groups = await collection(this.db, "groups");
+      const querySnapshot = await getDocs(groups);
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        const allGroupUsers = [
+          ...doc.data().users.map((user) => user.id),
+          doc.data().creator,
+        ];
+        const allNewGroupUsers = [...userIds, creator];
+
+        if (
+          allGroupUsers.sort().join(",") === allNewGroupUsers.sort().join(",")
+        ) {
+          throw new Error("The same group already exists.");
+        }
+      });
+
       const docRef = await addDoc(collection(this.db, "groups"), {
         name,
         description,
@@ -327,6 +367,28 @@ class FireStoreService {
       return docRef.id;
     } catch (e) {
       console.error("Error creating group: ", e);
+      return { error: e };
+    }
+  }
+
+  async getAllPendingGroups(uid) {
+    try {
+      const groups = await collection(this.db, "groups");
+      const querySnapshot = await getDocs(groups);
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        if (
+          doc.data().creator === uid ||
+          doc.data().users.some((user) => user.id === uid)
+        ) {
+          if (doc.data().users.some((user) => !user.accepted)) {
+            data.push({ id: doc.id, ...doc.data() });
+          }
+        }
+      });
+      return data;
+    } catch (e) {
+      console.error("Error getting pending groups: ", e);
     }
   }
 
@@ -383,10 +445,102 @@ class FireStoreService {
       createdGroups.forEach((doc) => {
         data.push({ id: doc.id, ...doc.data() });
       });
-      return data;
+
+      return data.filter((group) => {
+        return group.users.every((user) => user.accepted);
+      });
+      ata;
     } catch (e) {
       console.error("Error getting groups: ", e);
     }
   }
+  async acceptGroupRequest(groupId, userId) {
+    try {
+      const docRef = doc(this.db, "groups", groupId);
+      const docSnap = await getDoc(docRef);
+      this.validateGroup(docSnap, userId);
+      const users = docSnap.data().users.map((user) => {
+        if (user.id === userId) {
+          return { id: user.id, accepted: true };
+        }
+        return user;
+      });
+      await updateDoc(docRef, {
+        users,
+      });
+    } catch (e) {
+      console.error("Error accepting group request ", e);
+    }
+  }
+  async declineGroupRequest(groupId, userId) {
+    try {
+      const docRef = doc(this.db, "groups", groupId);
+      const docSnap = await getDoc(docRef);
+      this.validateGroup(docSnap, userId);
+      const users = docSnap.data().users.filter((user) => user.id !== userId);
+      if (users.length === 0) {
+        await deleteDoc(docRef);
+        return;
+      }
+      await updateDoc(docRef, {
+        users,
+      });
+    } catch (error) {
+      console.error("Error declining group request ", e);
+    }
+  }
+  async getGroupMovies(groupId, userId) {
+    try {
+      const docRef = doc(this.db, "groups", groupId);
+      const docSnap = await getDoc(docRef);
+
+      if (
+        docSnap.data().creator === userId ||
+        docSnap.data().users.some((user) => user.id === userId)
+      ) {
+        if (docSnap.data().users.some((user) => user.accepted === false)) {
+          throw new Error(
+            "Your group is still pending. Please check back after all the members have accepted the invitation",
+            {
+              cause: "group is pending",
+            }
+          );
+        } else {
+          const allGroupUsers = [
+            ...docSnap.data().users.map((user) => user.id),
+            docSnap.data().creator,
+          ];
+
+          const movies = this.getMoviesOfUsers(allGroupUsers);
+          return movies;
+        }
+      } else {
+        throw new Error("It looks like you are not a member of this group.", {
+          cause: "not a member",
+        });
+      }
+    } catch (e) {
+      //console.error("Error checking group accessibility ", e.cause);
+      return { error: e };
+    }
+  }
+
+  validateGroup(docSnap, userId) {
+    if (!docSnap.exists()) {
+      throw new Error("Group does not exist");
+    }
+    if (docSnap.data().creator === userId) {
+      throw new Error("User is creator");
+    }
+    if (!docSnap.data().users.some((user) => user.id === userId)) {
+      throw new Error("User is not in group");
+    }
+    if (
+      docSnap.data().users.some((user) => user.id === userId && user.accepted)
+    ) {
+      throw new Error("User already accepted");
+    }
+  }
 }
+
 export default new FireStoreService(getFirestore(getApp()));

@@ -1,50 +1,88 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import GroupCard from "./GroupCard";
 import PendingGroupCard from "./PendingGroupCard";
 import useFireStore from "../../../src/hook/useFireStore";
+import Link from "next/link";
+import Loading from "../../misc/Loading";
 
 const GroupList = ({ user }) => {
   const uid = user.uid;
-  const { getPendingGroups, getSentGroupRequests, loading } = useFireStore();
+  const {
+    getAllPendingGroups,
+    getGroups,
+    acceptGroupRequest,
+    declineGroupRequest,
+    loading,
+  } = useFireStore();
+  const [groups, setGroups] = useState([]);
   const [pendingGroups, setPendingGroups] = useState([]);
-  const [sentGroupRequests, setSentGroupRequests] = useState([]);
-  const [fetch, setFetch] = useState(true);
+
+  const fetchGroupList = useCallback(() => {
+    getGroups(uid).then((data) => {
+      setGroups(data);
+    });
+    getAllPendingGroups(uid).then((data) => {
+      setPendingGroups(data);
+    });
+  }, [getAllPendingGroups, getGroups, uid]);
 
   useEffect(() => {
-    if (fetch) {
-      getPendingGroups(uid).then((data) => {
-        setPendingGroups(data);
-      });
-      getSentGroupRequests(uid).then((data) => {
-        setSentGroupRequests(data);
-      });
+    fetchGroupList();
+  }, []);
 
-      setFetch(false);
-    }
-  }, [fetch]);
+  const handleAccept = useCallback(
+    async (groupId) => {
+      await acceptGroupRequest(groupId, uid);
+      fetchGroupList();
+    },
+    [acceptGroupRequest, fetchGroupList, uid]
+  );
+
+  const handleDecline = useCallback(
+    async (groupId) => {
+      await declineGroupRequest(groupId, uid);
+      fetchGroupList();
+    },
+    [declineGroupRequest, fetchGroupList, uid]
+  );
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Loading />
+      </div>
+    );
   }
   return (
     <div className="flex flex-col gap-2">
-      {/* {groups.map((group) => (
-        <GroupCard group={group} key={group.id} />
-      ))}
-       */}
+      {groups.length !== 0 && (
+        <>
+          <h2 className="text-xl font-bold text-center">Groups</h2>
+          {groups.map((group) => (
+            <Link
+              href={`contacts/groups/${group.id}`}
+              key={group.id}
+              legacyBehavior
+            >
+              <a>
+                <GroupCard group={group} key={group.id} />
+              </a>
+            </Link>
+          ))}
+        </>
+      )}
+
       {pendingGroups.length !== 0 && (
         <>
           <h2 className="text-xl font-bold text-center">Pending Groups</h2>
           {pendingGroups.map((group) => (
-            <PendingGroupCard group={group} key={group.id + "_pending"} />
-          ))}
-        </>
-      )}
-      {sentGroupRequests.length !== 0 && (
-        <>
-          <h2 className="text-xl font-bold text-center">Sent Group Requests</h2>
-          {sentGroupRequests.map((group) => (
-            <GroupCard group={group} key={group.id + "_sent"} />
+            <PendingGroupCard
+              group={group}
+              user={user}
+              key={group.id + "_pending"}
+              accept={() => handleAccept(group.id)}
+              decline={() => handleDecline(group.id)}
+            />
           ))}
         </>
       )}

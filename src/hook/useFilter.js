@@ -44,16 +44,14 @@ export function FilterContextProvider({ children }) {
   }, [genres, providers, release_year]);
 
   return (
-    <FilterContext.Provider>
-      <ReleaseYearContext.Provider
-        value={{ release_year, setReleaseYear, minReleaseYear, maxReleaseYear }}
-      >
-        <ProviderContext.Provider value={{ providers, setProviders }}>
-          <GenreContext.Provider value={{ genres, setGenres }}>
-            {children}
-          </GenreContext.Provider>
-        </ProviderContext.Provider>
-      </ReleaseYearContext.Provider>
-    </FilterContext.Provider>
+    <ReleaseYearContext.Provider
+      value={{ release_year, setReleaseYear, minReleaseYear, maxReleaseYear }}
+    >
+      <ProviderContext.Provider value={{ providers, setProviders }}>
+        <GenreContext.Provider value={{ genres, setGenres }}>
+          {children}
+        </GenreContext.Provider>
+      </ProviderContext.Provider>
+    </ReleaseYearContext.Provider>
   );
 }

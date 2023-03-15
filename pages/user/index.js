@@ -3,11 +3,17 @@ import styles from "../../styles/misc/card.module.css";
 import ProfileData from "../../components/User/ProfileData";
 import UserFilter from "../../components/User/UserFilter";
 import Link from "next/link";
+import Loading from "../../components/misc/Loading";
 
 function UserPage({ auth }) {
   const { user } = auth;
 
-  if (!user) return <div>Loading</div>;
+  if (!user)
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   return (
     <div
       className={`m-2 p-2 ${styles.card} flex-grow  max-w-lg rounded-xl flex flex-col gap-2 overflow-auto`}

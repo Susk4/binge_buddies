@@ -13,6 +13,7 @@ const GroupCard = ({ friend }) => {
         height={50}
         className="rounded-full"
         alt="Profile Picture"
+        referrerPolicy="no-referrer"
         unoptimized
       />
       <h2 className="text-xl font-bold">{friend.name}</h2>

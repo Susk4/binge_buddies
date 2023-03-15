@@ -1,8 +1,8 @@
+import { deleteCookie, setCookie } from "cookies-next";
 import React, { useEffect, useState } from "react";
 import useAuth from "../hook/useAuth";
 import AuthService from "../services/AuthService";
-import { setCookie, deleteCookie } from "cookies-next";
-
+import Loading from "../../components/misc/Loading";
 export default function AuthStateChanged({ children }) {
   const { setUser } = useAuth();
   const [loading, setLoading] = useState(true);
@@ -21,7 +21,11 @@ export default function AuthStateChanged({ children }) {
   }, []);
 
   if (loading) {
-    return <h1>Page is loading...</h1>;
+    return (
+      <h1>
+        <Loading />
+      </h1>
+    );
   }
 
   return children;

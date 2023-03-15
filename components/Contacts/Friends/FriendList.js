@@ -3,6 +3,7 @@ import FriendCard from "./FriendCard";
 import PendingFriendCard from "./PendingFriendCard";
 import useFireStore from "../../../src/hook/useFireStore";
 import FriendListGroup from "./FriendListGroup";
+import Loading from "../../misc/Loading";
 
 const FriendList = ({ user }) => {
   const uid = useMemo(() => user.uid, [user]);
@@ -16,37 +17,41 @@ const FriendList = ({ user }) => {
   } = useFireStore();
   const [contactRequests, setContactRequests] = useState([]);
   const [contactRequestsSent, setContactRequestsSent] = useState([]);
-  const [fetch, setFetch] = useState(true);
   const [friends, setFriends] = useState([]);
 
-  useEffect(() => {
-    if (fetch) {
-      getContactRequests(uid).then((data) => {
-        setContactRequests(data);
-      });
-      getContactRequestsSent(uid).then((data) => {
-        setContactRequestsSent(data);
-      });
+  const fetchFriendsList = () => {
+    getContactRequests(uid).then((data) => {
+      setContactRequests(data);
+    });
+    getContactRequestsSent(uid).then((data) => {
+      setContactRequestsSent(data);
+    });
 
-      getContacts(uid).then((data) => {
-        setFriends(data);
-      });
-      setFetch(false);
-    }
-  }, [fetch]);
+    getContacts(uid).then((data) => {
+      setFriends(data);
+    });
+  };
+
+  useEffect(() => {
+    fetchFriendsList();
+  }, []);
 
   const handleAccept = async (contact) => {
     await acceptContactRequest(contact);
-    setFetch(true);
+    fetchFriendsList();
   };
 
   const handleDecline = async (contact) => {
     await declineContactRequest(contact);
-    setFetch(true);
+    fetchFriendsList();
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Loading />
+      </div>
+    );
   }
   return (
     <div className="flex flex-col gap-2">

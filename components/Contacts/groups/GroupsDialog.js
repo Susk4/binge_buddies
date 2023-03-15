@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import BingeDialog from "../../misc/BingeDialog";
 import BingeSelect from "../../misc/BingeSelect";
 import useFireStore from "../../../src/hook/useFireStore";
@@ -18,11 +18,10 @@ const GroupsDialog = ({ isOpen, setIsOpen, user }) => {
   }, []);
 
   const handleOnChange = (e) => {
-    console.log(e);
     setSelectedUsers(e);
   };
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     if (
       !groupName ||
       groupName === "" ||
@@ -38,11 +37,22 @@ const GroupsDialog = ({ isOpen, setIsOpen, user }) => {
         groupDescription,
         selectedUsers.map((user) => user.value),
         user.uid
-      );
-
-      setIsOpen(false);
+      ).then((res) => {
+        if (res.error) {
+          setError(res.error.message);
+          return;
+        }
+        setIsOpen(false);
+      });
     }
-  };
+  }, [
+    groupName,
+    groupDescription,
+    selectedUsers,
+    createGroup,
+    user.uid,
+    setIsOpen,
+  ]);
 
   return (
     <BingeDialog

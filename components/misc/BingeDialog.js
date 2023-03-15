@@ -1,4 +1,6 @@
 import { Dialog } from "@headlessui/react";
+import React from "react";
+import Loading from "./Loading";
 
 const BingeDialog = ({
   isOpen,
@@ -13,7 +15,6 @@ const BingeDialog = ({
   const handleSubmit = () => {
     callback();
   };
-
   return (
     <Dialog
       open={isOpen}
@@ -42,16 +43,16 @@ const BingeDialog = ({
             <button
               disabled={loading}
               onClick={() => setIsOpen(false)}
-              className="p-2 bg-red-500 hover:bg-red-700  flex-grow"
+              className="p-2 bg-red-500 hover:bg-red-700  flex-grow flex justify-center items-center"
             >
-              {loading ? "Loading..." : "Cancel"}
+              {loading ? <Loading size={30} /> : "Cancel"}
             </button>
             <button
               disabled={loading}
               onClick={() => handleSubmit()}
-              className="p-2 bg-blue-500 hover:bg-blue-700  flex-grow"
+              className="p-2 bg-blue-500 hover:bg-blue-700  flex-grow flex justify-center items-center"
             >
-              {loading ? "Loading..." : "Submit"}
+              {loading ? <Loading size={30} /> : "Submit"}
             </button>
           </div>
         </Dialog.Panel>

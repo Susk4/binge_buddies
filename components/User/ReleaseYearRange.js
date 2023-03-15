@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ReleaseYearContext } from "../../src/hook/useFilter";
 import { useContext } from "react";
 import UserFilterRowWrapper from "./UserFilterRowWrapper";
+import Loading from "../misc/Loading";
 
 const ReleaseYearRange = () => {
   const { release_year, setReleaseYear, minReleaseYear, maxReleaseYear } =
@@ -20,7 +21,12 @@ const ReleaseYearRange = () => {
   const handleOnThumbDragEnd = (from, to) => {
     setReleaseYear({ from: from, to: to });
   };
-  if (!value) return <>Loading...</>;
+  if (!value)
+    return (
+      <>
+        <Loading />
+      </>
+    );
   return (
     <UserFilterRowWrapper title="Release year">
       <div className="flex flex-row gap-2 items-center">
