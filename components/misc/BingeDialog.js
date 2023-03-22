@@ -29,7 +29,7 @@ const BingeDialog = ({
               {title}
             </Dialog.Title>
             <Dialog.Description>{description}</Dialog.Description>
-            {children}
+            {children ? children : null}
           </div>
           {error && (
             <div className=" text-center p-2 text-red-500">{error}</div>

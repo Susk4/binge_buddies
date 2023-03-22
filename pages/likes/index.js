@@ -7,7 +7,7 @@ import MovieList from "../../components/misc/MovieList";
 import Loading from "../../components/misc/Loading";
 
 function Likes({ auth }) {
-  const { getUsersMoviesData, loading } = useFireStore();
+  const { deleteMovieFromUser, getUsersMoviesData, loading } = useFireStore();
   const [moviesData, setMoviesData] = useState([]);
 
   useEffect(() => {
@@ -15,6 +15,14 @@ function Likes({ auth }) {
       setMoviesData(data);
     });
   }, []);
+
+  const deleteMovie = (movie) => {
+    deleteMovieFromUser(auth.user.uid, movie).then(() => {
+      getUsersMoviesData(auth.user.uid).then((data) => {
+        setMoviesData(data);
+      });
+    });
+  };
 
   if (loading) {
     return (
@@ -29,7 +37,11 @@ function Likes({ auth }) {
       className={`m-2 p-2 ${styles.card} flex-shrink basis-auto min-h-0 rounded-xl flex flex-col gap-2 overflow-auto md:w-3/5`}
     >
       <h1 className="text-2xl font-bold text-center ">Likes</h1>
-      <MovieList movies={moviesData} />
+      <MovieList
+        movies={moviesData}
+        deletableItems={true}
+        deleteMovie={deleteMovie}
+      />
     </div>
   );
 }

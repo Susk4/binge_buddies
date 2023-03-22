@@ -50,6 +50,11 @@ export default function useFireStore() {
   const addMovieToUser = async (uid, movie) => {
     await FireStoreService.addMovieToUser(uid, movie);
   };
+
+  const deleteMovieFromUser = async (uid, movie) => {
+    await FireStoreService.deleteMovieFromUser(uid, movie);
+  };
+
   const storeMovie = async (movie) => {
     await FireStoreService.storeMovie(movie);
   };
@@ -169,6 +174,7 @@ export default function useFireStore() {
     getUserFilter,
     updateUserFilter,
     addMovieToUser,
+    deleteMovieFromUser,
     storeMovie,
     getUsersMoviesData,
     getUsersMovies,

@@ -122,18 +122,48 @@ class FireStoreService {
     }
   }
 
+  async deleteMovieFromUser(uid, movieId) {
+    try {
+      const docRef = doc(this.db, "users", uid);
+      //delete movie from docRef.movies
+      const user = await getDoc(docRef);
+      if (user.exists()) {
+        const movies = user.data().movies;
+        const index = movies.indexOf(movieId);
+        if (index > -1) {
+          movies.splice(index, 1);
+        }
+        await updateDoc(docRef, {
+          movies: movies,
+        });
+      }
+    } catch (e) {
+      console.error("Error deleting movies: ", movieId, e);
+    }
+  }
+
+  async getMoviesData(movies) {
+    try {
+      const data = [];
+      while (movies.length > 0) {
+        const batch = movies.splice(0, 10);
+        const moviesBatch = await getDocs(
+          query(collection(this.db, "movies"), where("id", "in", batch))
+        );
+        moviesBatch.forEach((doc) => {
+          data.push(doc.data());
+        });
+      }
+      return data;
+    } catch (e) {
+      console.error("Error reading movies data: ", e);
+    }
+  }
+
   async getUsersMoviesData(uid) {
     try {
       const movies = await this.getUsersMovies(uid);
-      const colRef = collection(this.db, "movies");
-      const moviesData = await getDocs(colRef);
-      const data = [];
-      moviesData.forEach((doc) => {
-        if (movies.includes(doc.data().id)) {
-          data.push(doc.data());
-        }
-      });
-      return data;
+      return await this.getMoviesData(movies);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -150,15 +180,7 @@ class FireStoreService {
         a.filter((c) => b.includes(c))
       );
 
-      const colRef = collection(this.db, "movies");
-      const moviesData = await getDocs(colRef);
-      const data = [];
-      moviesData.forEach((doc) => {
-        if (intersectingMovies.includes(doc.data().id)) {
-          data.push(doc.data());
-        }
-      });
-      return data;
+      return await this.getMoviesData(intersectingMovies);
     } catch (e) {
       console.error("Error getting movies of users document: ", e);
     }
