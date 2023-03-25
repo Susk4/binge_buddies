@@ -27,5 +27,26 @@ export default function useTmdb() {
     return movies;
   };
 
-  return { getGenres, getProviders, discoverMovies, loading };
+  const getPopularMovies = async (page) => {
+    setLoading(true);
+    const movies = await TmdbService.getPopularMovies(page);
+    setLoading(false);
+    return movies;
+  };
+
+  const searchMovies = async (query, page) => {
+    setLoading(true);
+    const movies = await TmdbService.searchMovies(query, page);
+    setLoading(false);
+    return movies;
+  };
+
+  return {
+    getGenres,
+    getProviders,
+    discoverMovies,
+    getPopularMovies,
+    searchMovies,
+    loading,
+  };
 }

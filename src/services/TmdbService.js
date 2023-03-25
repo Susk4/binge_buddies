@@ -3,12 +3,13 @@ class TmdbService {
     this.apiKey = "c46784e3d514ed9b482eb9093a091468";
     this.baseUrl = "https://api.themoviedb.org/3";
 
-    this.searchUrl = `${this.baseUrl}/search/movie?api_key=${this.apiKey}&query=`;
+    this.searchUrl = `${this.baseUrl}/search/movie?api_key=${this.apiKey}&include_adult=false&include_video=false&query=`;
     this.movieUrl = `${this.baseUrl}/movie/`;
 
     this.genreUrl = `${this.baseUrl}/genre/movie/list?api_key=${this.apiKey}`;
     this.providerUrl = `${this.baseUrl}/watch/providers/movie?api_key=${this.apiKey}`;
     this.discoverUrl = `${this.baseUrl}/discover/movie?api_key=${this.apiKey}&include_adult=false&include_video=false&vote_count.gte=100&with_original_language=en`;
+    this.popularUrl = `${this.baseUrl}/movie/popular?api_key=${this.apiKey}`;
 
     this.providerList = [
       "Amazon Prime Video",
@@ -64,6 +65,20 @@ class TmdbService {
     }
     data.results = filteredResults;
 
+    return data;
+  }
+
+  async getPopularMovies(page = 1) {
+    const url = `${this.popularUrl}&page=${page}`;
+    const movies = await fetch(url);
+    const data = await movies.json();
+    return data;
+  }
+
+  async searchMovies(query, page) {
+    const url = `${this.searchUrl}${query}&page=${page}`;
+    const movies = await fetch(url);
+    const data = await movies.json();
     return data;
   }
 }
