@@ -142,34 +142,43 @@ class FireStoreService {
     }
   }
 
-  async getMoviesData(movies) {
+  async getMoviesData(movies, page) {
     try {
-      const data = [];
-      while (movies.length > 0) {
-        const batch = movies.splice(0, 10);
-        const moviesBatch = await getDocs(
-          query(collection(this.db, "movies"), where("id", "in", batch))
-        );
-        moviesBatch.forEach((doc) => {
-          data.push(doc.data());
-        });
+      const data = {
+        results: [],
+        page: page,
+        total_pages:
+          movies.length % 10 === 0
+            ? movies.length / 10
+            : Math.floor(movies.length / 10) + 1,
+        total_results: movies.length,
+      };
+      if (data.total_pages < page) {
+        data.page = data.total_pages;
       }
+      const batchIds = movies.slice((data.page - 1) * 10, data.page * 10);
+      const moviesBatch = await getDocs(
+        query(collection(this.db, "movies"), where("id", "in", batchIds))
+      );
+      moviesBatch.forEach((doc) => {
+        data.results.push(doc.data());
+      });
       return data;
     } catch (e) {
       console.error("Error reading movies data: ", e);
     }
   }
 
-  async getUsersMoviesData(uid) {
+  async getUsersMoviesData(uid, page) {
     try {
-      const movies = await this.getUsersMovies(uid);
-      return await this.getMoviesData(movies);
+      const movies = await this.getUsersMovies(uid, page);
+      return await this.getMoviesData(movies, page);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
   }
 
-  async getMoviesOfUsers(uids) {
+  async getMoviesOfUsers(uids, page) {
     try {
       const movies = [];
       for (const uid of uids) {
@@ -180,7 +189,7 @@ class FireStoreService {
         a.filter((c) => b.includes(c))
       );
 
-      return await this.getMoviesData(intersectingMovies);
+      return await this.getMoviesData(intersectingMovies, page);
     } catch (e) {
       console.error("Error getting movies of users document: ", e);
     }
@@ -511,7 +520,7 @@ class FireStoreService {
       console.error("Error declining group request ", e);
     }
   }
-  async getGroupMovies(groupId, userId) {
+  async getGroupMovies(groupId, userId, page) {
     try {
       const docRef = doc(this.db, "groups", groupId);
       const docSnap = await getDoc(docRef);
@@ -533,7 +542,7 @@ class FireStoreService {
             docSnap.data().creator,
           ];
 
-          const movies = this.getMoviesOfUsers(allGroupUsers);
+          const movies = this.getMoviesOfUsers(allGroupUsers, page);
           return movies;
         }
       } else {

@@ -5,21 +5,27 @@ import { useState } from "react";
 import { useEffect } from "react";
 import MovieList from "../../components/misc/MovieList";
 import Loading from "../../components/misc/Loading";
+import Pagination from "../../components/movies/Pagination";
 
 function Likes({ auth }) {
   const { deleteMovieFromUser, getUsersMoviesData, loading } = useFireStore();
   const [moviesData, setMoviesData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
 
   useEffect(() => {
-    getUsersMoviesData(auth.user.uid).then((data) => {
-      setMoviesData(data);
+    getUsersMoviesData(auth.user.uid, page).then((data) => {
+      setMoviesData(data.results);
+      setPages(data.total_pages);
     });
-  }, []);
+  }, [page]);
 
   const deleteMovie = (movie) => {
     deleteMovieFromUser(auth.user.uid, movie).then(() => {
-      getUsersMoviesData(auth.user.uid).then((data) => {
-        setMoviesData(data);
+      getUsersMoviesData(auth.user.uid, page).then((data) => {
+        setMoviesData(data.results);
+        setPage(data.page);
+        setPages(data.total_pages);
       });
     });
   };
@@ -42,6 +48,7 @@ function Likes({ auth }) {
         deletableItems={true}
         deleteMovie={deleteMovie}
       />
+      <Pagination page={page} setPage={setPage} pages={pages} />
     </div>
   );
 }

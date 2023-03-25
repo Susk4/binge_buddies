@@ -59,9 +59,9 @@ export default function useFireStore() {
     await FireStoreService.storeMovie(movie);
   };
 
-  const getUsersMoviesData = async (uid) => {
+  const getUsersMoviesData = async (uid, page) => {
     setLoading(true);
-    const usersMovies = await FireStoreService.getUsersMoviesData(uid);
+    const usersMovies = await FireStoreService.getUsersMoviesData(uid, page);
     setLoading(false);
     return usersMovies;
   };
@@ -144,9 +144,13 @@ export default function useFireStore() {
   const declineGroupRequest = async (groupId, userId) => {
     await FireStoreService.declineGroupRequest(groupId, userId);
   };
-  const getGroupMovies = async (groupId, userId) => {
+  const getGroupMovies = async (groupId, userId, page) => {
     setLoading(true);
-    const groupMovies = await FireStoreService.getGroupMovies(groupId, userId);
+    const groupMovies = await FireStoreService.getGroupMovies(
+      groupId,
+      userId,
+      page
+    );
     setLoading(false);
     return groupMovies;
   };
