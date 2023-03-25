@@ -39,7 +39,7 @@ const MovieList = ({ movies, deletableItems, deleteMovie }) => {
                   {deletableItems && (
                     <>
                       <button
-                        className="text-red-500 flex items-center"
+                        className="text-red-500 flex items-center  hover:text-red-700"
                         onClick={() => {
                           setDeletableMovie(movie);
                           setIsOpen(true);
