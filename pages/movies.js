@@ -58,7 +58,7 @@ const Movies = ({ auth }) => {
 
   return (
     <div
-      className={`m-2 p-2 ${styles.card} rounded-xl flex flex-col gap-2 overflow-auto`}
+      className={`m-2 p-2 ${styles.card} rounded-xl flex flex-col gap-2 flex-grow overflow-auto`}
     >
       <h1 className="text-3xl text-center">Find Movies</h1>
 
@@ -96,7 +96,7 @@ const Movies = ({ auth }) => {
                 />
               </div>
 
-              <h3 className="text-center">{m.title}</h3>
+              <h3 className="text-center  max-w-xs">{m.title}</h3>
             </div>
             <div className="text-white">
               {isLiked(m) ? (
