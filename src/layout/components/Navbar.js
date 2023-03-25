@@ -18,7 +18,7 @@ export default function Navbar() {
     <nav ref={ref}>
       <div className={`font-bold  p-1 ${isVisible ? "bg-white" : ""}`}>
         <div className=" flex h-10 items-center justify-between px-2">
-          <div className="flex-none ">
+          <div className="flex-none">
             <Link href="/" legacyBehavior>
               <a>
                 <BiCameraMovie size={size} className="cursor-pointer" />
