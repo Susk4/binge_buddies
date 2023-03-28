@@ -402,6 +402,43 @@ class FireStoreService {
     }
   }
 
+  async deleteGroup(groupId, uid) {
+    try {
+      const docRef = doc(this.db, "groups", groupId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.data().creator === uid) {
+        await deleteDoc(docRef);
+      } else {
+        throw new Error("You are not the creator of this group.");
+      }
+    } catch (e) {
+      console.error("Error deleting group: ", e);
+    }
+  }
+
+  async leaveGroup(groupId, uid) {
+    try {
+      const docRef = doc(this.db, "groups", groupId);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.data().creator === uid) {
+        throw new Error("You are the creator of this group.");
+      } else if (!docSnap.data().users.some((user) => user.id === uid)) {
+        throw new Error("You are not a member of this group.");
+      } else {
+        const users = docSnap.data().users.filter((user) => user.id !== uid);
+        if (users.length === 0) {
+          await deleteDoc(docRef);
+        } else {
+          await updateDoc(docRef, {
+            users,
+          });
+        }
+      }
+    } catch (e) {
+      console.error("Error leaving group: ", e);
+    }
+  }
+
   async getAllPendingGroups(uid) {
     try {
       const groups = await collection(this.db, "groups");
@@ -489,7 +526,7 @@ class FireStoreService {
     try {
       const docRef = doc(this.db, "groups", groupId);
       const docSnap = await getDoc(docRef);
-      this.validateGroup(docSnap, userId);
+      this.validateGroupRequestAction(docSnap, userId);
       const users = docSnap.data().users.map((user) => {
         if (user.id === userId) {
           return { id: user.id, accepted: true };
@@ -507,7 +544,7 @@ class FireStoreService {
     try {
       const docRef = doc(this.db, "groups", groupId);
       const docSnap = await getDoc(docRef);
-      this.validateGroup(docSnap, userId);
+      this.validateGroupRequestAction(docSnap, userId);
       const users = docSnap.data().users.filter((user) => user.id !== userId);
       if (users.length === 0) {
         await deleteDoc(docRef);
@@ -556,7 +593,7 @@ class FireStoreService {
     }
   }
 
-  validateGroup(docSnap, userId) {
+  validateGroupRequestAction(docSnap, userId) {
     if (!docSnap.exists()) {
       throw new Error("Group does not exist");
     }

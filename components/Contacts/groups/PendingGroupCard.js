@@ -1,8 +1,7 @@
 import styles from "../../../styles/misc/card.module.css";
-import GroupUser from "./GroupUser";
-import GroupRoleRow from "./GroupRoleRow";
+import GroupData from "./GroupData";
 
-const PendingGroupCard = ({ user, group, accept, decline }) => {
+const PendingGroupCard = ({ user, group, accept, decline, refetch }) => {
   const handleAccept = () => {
     accept();
   };
@@ -16,17 +15,7 @@ const PendingGroupCard = ({ user, group, accept, decline }) => {
       key={group.id}
       className={`flex flex-col gap-2 p-2 ${styles.card} rounded-xl`}
     >
-      <h2 className="text-xl font-bold text-center">{group.name}</h2>
-
-      <GroupRoleRow roleName="Owner">
-        <GroupUser uid={group.creator} />
-      </GroupRoleRow>
-
-      <GroupRoleRow roleName="Users">
-        {group.users.map((user) => (
-          <GroupUser uid={user.id} key={user.id} />
-        ))}
-      </GroupRoleRow>
+      <GroupData group={group} refetch={refetch} />
       {group.users.some((u) => u.id === user.uid && !u.accepted) && (
         <div className="flex justify-center gap-2">
           <button

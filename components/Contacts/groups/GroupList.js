@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import GroupCard from "./GroupCard";
 import PendingGroupCard from "./PendingGroupCard";
 import useFireStore from "../../../src/hook/useFireStore";
-import Link from "next/link";
 import Loading from "../../misc/Loading";
 
 const GroupList = ({ user }) => {
@@ -59,15 +58,7 @@ const GroupList = ({ user }) => {
         <>
           <h2 className="text-xl font-bold text-center">Groups</h2>
           {groups.map((group) => (
-            <Link
-              href={`contacts/groups/${group.id}`}
-              key={group.id}
-              legacyBehavior
-            >
-              <a>
-                <GroupCard group={group} key={group.id} />
-              </a>
-            </Link>
+            <GroupCard group={group} key={group.id} refetch={fetchGroupList} />
           ))}
         </>
       )}
@@ -82,6 +73,7 @@ const GroupList = ({ user }) => {
               key={group.id + "_pending"}
               accept={() => handleAccept(group.id)}
               decline={() => handleDecline(group.id)}
+              refetch={fetchGroupList}
             />
           ))}
         </>

@@ -1,25 +1,22 @@
 import React from "react";
 import styles from "../../../styles/misc/card.module.css";
+import GroupData from "./GroupData";
+import Link from "next/link";
 
-import GroupUser from "./GroupUser";
-import GroupRoleRow from "./GroupRoleRow";
-
-const GroupCard = ({ group }) => {
+const GroupCard = ({ group, refetch }) => {
   return (
     <div
       key={group.id}
       className={`flex flex-col gap-2 p-2 ${styles.card} rounded-xl`}
     >
-      <h2 className="text-xl font-bold text-center">{group.name}</h2>
-
-      <GroupRoleRow roleName="Owner">
-        <GroupUser uid={group.creator} />
-      </GroupRoleRow>
-      <GroupRoleRow roleName="Users">
-        {group.users.map((user) => (
-          <GroupUser uid={user.id} key={user.id} />
-        ))}
-      </GroupRoleRow>
+      <GroupData group={group} refetch={refetch} />
+      <div className="flex justify-end">
+        <Link href={`contacts/groups/${group.id}`} key={group.id} passHref>
+          <span className="bg-green-500 hover:bg-green-700 text-white rounded-xl p-2 cursor-pointer">
+            See Matches
+          </span>
+        </Link>
+      </div>
     </div>
   );
 };

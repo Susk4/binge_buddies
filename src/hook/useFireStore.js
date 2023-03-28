@@ -111,6 +111,17 @@ export default function useFireStore() {
     return groupId;
   };
 
+  const deleteGroup = async (groupId, uid) => {
+    setLoading(true);
+    await FireStoreService.deleteGroup(groupId, uid);
+    setLoading(false);
+  };
+  const leaveGroup = async (groupId, uid) => {
+    setLoading(true);
+    await FireStoreService.leaveGroup(groupId, uid);
+    setLoading(false);
+  };
+
   const getPendingGroups = async (uid) => {
     setLoading(true);
     const pendingGroups = await FireStoreService.getPendingGroups(uid);
@@ -166,6 +177,8 @@ export default function useFireStore() {
     declineContactRequest,
     sendContactRequest,
     createGroup,
+    deleteGroup,
+    leaveGroup,
     getPendingGroups,
     getSentGroupRequests,
     getAllPendingGroups,
