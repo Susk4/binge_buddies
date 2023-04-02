@@ -53,6 +53,12 @@ const FriendList = ({ user }) => {
       </div>
     );
   }
+  if (friends.length === 0 && contactRequests.length === 0)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <h1 className="text-2xl font-bold text-center">No friends found</h1>
+      </div>
+    );
   return (
     <div className="flex flex-col gap-2">
       {friends.length !== 0 && (

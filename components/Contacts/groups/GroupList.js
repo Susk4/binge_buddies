@@ -52,6 +52,14 @@ const GroupList = ({ user }) => {
       </div>
     );
   }
+
+  if (groups.length === 0 && pendingGroups.length === 0)
+    return (
+      <div className="flex items-center justify-center h-full">
+        <h1 className="text-2xl font-bold text-center">No groups found</h1>
+      </div>
+    );
+
   return (
     <div className="flex flex-col gap-2">
       {groups.length !== 0 && (
