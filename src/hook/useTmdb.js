@@ -21,7 +21,7 @@ export default function useTmdb() {
     const movies = await TmdbService.discoverMovies(
       user.filters,
       page,
-      user.movies
+      user.movies || []
     );
     setLoading(false);
     return movies;

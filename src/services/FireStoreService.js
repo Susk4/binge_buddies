@@ -172,6 +172,14 @@ class FireStoreService {
   async getUsersMoviesData(uid, page) {
     try {
       const movies = await this.getUsersMovies(uid, page);
+      if (movies.length === 0) {
+        return {
+          results: [],
+          page: 0,
+          total_pages: 0,
+          total_results: 0,
+        };
+      }
       return await this.getMoviesData(movies, page);
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -188,6 +196,15 @@ class FireStoreService {
       const intersectingMovies = movies.reduce((a, b) =>
         a.filter((c) => b.includes(c))
       );
+
+      if (movies.length === 0) {
+        return {
+          results: [],
+          page: 0,
+          total_pages: 0,
+          total_results: 0,
+        };
+      }
 
       return await this.getMoviesData(intersectingMovies, page);
     } catch (e) {
