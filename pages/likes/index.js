@@ -48,7 +48,9 @@ function Likes({ auth }) {
         deletableItems={true}
         deleteMovie={deleteMovie}
       />
-      <Pagination page={page} setPage={setPage} pages={pages} />
+      {moviesData.length !== 0 && (
+        <Pagination page={page} setPage={setPage} pages={pages} />
+      )}
     </div>
   );
 }

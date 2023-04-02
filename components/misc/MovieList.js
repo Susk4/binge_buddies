@@ -9,7 +9,7 @@ const MovieList = ({ movies, deletableItems, deleteMovie }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [deletableMovie, setDeletableMovie] = useState(null);
   if (movies.length === 0) {
-    return <>You have no liked movies.</>;
+    return <p className="text-center">There are no movies on your list.</p>;
   }
   return (
     <>

@@ -48,7 +48,9 @@ const GroupMovies = ({ auth }) => {
     >
       <h1 className="text-2xl font-bold text-center ">Matches</h1>
       <MovieList movies={moviesData} />
-      <Pagination page={page} setPage={setPage} pages={pages} />
+      {moviesData.length !== 0 && (
+        <Pagination page={page} setPage={setPage} pages={pages} />
+      )}
     </div>
   );
 };
