@@ -66,9 +66,9 @@ const Movies = ({ auth }) => {
 
   if (loading) {
     return (
-      <>
+      <div className="flex justify-center">
         <Loading />
-      </>
+      </div>
     );
   }
 
@@ -84,7 +84,7 @@ const Movies = ({ auth }) => {
         handleSearch={handleSearch}
       />
 
-      <div className="flex-grow flex items-center">
+      <div className="flex-grow flex items-center justify-center">
         {movies.length === 0 && (
           <div className="flex-grow flex justify-center items-center">
             <h1 className="text-2xl">No movies found</h1>

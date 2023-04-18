@@ -10,14 +10,14 @@ const MobileNavItems = ({ logout, setIsVisible }) => {
       {items.map((item) => (
         <Link href={item.url} key={item.label}>
           <div
-            className="p-2 hover:bg-red-600 hover:text-white"
+            className="p-2 cursor-pointer text-center"
             onClick={() => setIsVisible(false)}
           >
             {item.label}
           </div>
         </Link>
       ))}
-      <div className="p-2 hover:bg-red-600 hover:text-white">
+      <div className="p-2  flex justify-center">
         <button onClick={logout} className="flex gap-2 items-center">
           Logout <IoLogOutOutline size={24} />
         </button>

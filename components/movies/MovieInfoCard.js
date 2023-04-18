@@ -30,7 +30,7 @@ const MovieInfoCard = ({ movie, isLiked, handleLike }) => {
               onClick={() => handleLike(movie)}
               className="px-2 py-1 bg-red-600 hover:bg-red-700  text-lg rounded-xl"
             >
-              Add to liked movies
+              Like
             </button>
           </div>
         )}

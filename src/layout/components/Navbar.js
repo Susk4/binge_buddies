@@ -1,23 +1,22 @@
 import NavItems from "./NavItems";
-import { NAV_ITEMS } from "../../config/constants";
-import useClickOutSide from "../../hook/useClickOutSide";
+import { useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { BiCameraMovie } from "react-icons/bi";
-import { IoLogOutOutline } from "react-icons/io5";
+import { IoLogOutOutline, IoClose } from "react-icons/io5";
 import useAuth from "../../hook/useAuth";
 import Link from "next/link";
 import UserImageLink from "./UserImageLink";
 import MobileNavItems from "./MobileNavItems";
 
 export default function Navbar() {
+  const [isVisible, setIsVisible] = useState(false);
   const { logout } = useAuth();
   const size = 30;
-  const { ref, isVisible, setIsVisible } = useClickOutSide(false);
 
   return (
-    <nav ref={ref}>
-      <div className={`font-bold  p-1 ${isVisible ? "bg-white" : ""}`}>
-        <div className=" flex h-10 items-center justify-between px-2">
+    <nav>
+      <div className={`font-bold  ${isVisible ? "bg-white" : ""}`}>
+        <div className=" flex h-10 items-center justify-between mx-2 my-1">
           <div className="flex-none">
             <Link href="/" legacyBehavior>
               <a>
@@ -42,14 +41,18 @@ export default function Navbar() {
                 setIsVisible(!isVisible);
               }}
             >
-              <GiHamburgerMenu size={size} />
+              {!isVisible ? (
+                <GiHamburgerMenu size={size} />
+              ) : (
+                <IoClose size={size} />
+              )}
             </button>
           </div>
         </div>
         <div
           className={` ${
-            isVisible ? "h-52 py-1" : "h-0"
-          } md:h-0 bg-white overflow-hidden transition-all duration-500 ease-in-out `}
+            isVisible ? "h-full" : "h-0"
+          } md:h-0 bg-white overflow-hidden absolute w-full z-10  transition-all duration-500 ease-in-out `}
         >
           <MobileNavItems logout={logout} setIsVisible={setIsVisible} />
         </div>

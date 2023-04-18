@@ -122,13 +122,6 @@ export default function useFireStore() {
     setLoading(false);
   };
 
-  const getPendingGroups = async (uid) => {
-    setLoading(true);
-    const pendingGroups = await FireStoreService.getPendingGroups(uid);
-    setLoading(false);
-    return pendingGroups;
-  };
-
   const getAllPendingGroups = async (uid) => {
     setLoading(true);
     const pendingGroups = await FireStoreService.getAllPendingGroups(uid);
@@ -136,12 +129,6 @@ export default function useFireStore() {
     return pendingGroups;
   };
 
-  const getSentGroupRequests = async (uid) => {
-    setLoading(true);
-    const sentGroupRequests = await FireStoreService.getSentGroupRequests(uid);
-    setLoading(false);
-    return sentGroupRequests;
-  };
   const getGroups = async (uid) => {
     setLoading(true);
     const groups = await FireStoreService.getGroups(uid);
@@ -179,8 +166,6 @@ export default function useFireStore() {
     createGroup,
     deleteGroup,
     leaveGroup,
-    getPendingGroups,
-    getSentGroupRequests,
     getAllPendingGroups,
     getGroups,
     acceptGroupRequest,

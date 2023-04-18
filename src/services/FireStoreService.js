@@ -477,40 +477,6 @@ class FireStoreService {
     }
   }
 
-  async getPendingGroups(uid) {
-    try {
-      const groups = await getDocs(
-        query(
-          collection(this.db, "groups"),
-          where("users", "array-contains", { id: uid, accepted: false })
-        )
-      );
-      const data = [];
-      groups.forEach((doc) => {
-        data.push({ id: doc.id, ...doc.data() });
-      });
-      return data;
-    } catch (e) {
-      console.error("Error getting pending groups: ", e);
-    }
-  }
-  async getSentGroupRequests(uid) {
-    try {
-      const groups = await getDocs(
-        query(collection(this.db, "groups"), where("creator", "==", uid))
-      );
-      const data = [];
-      groups.forEach((doc) => {
-        if (doc.data().users.some((user) => !user.accepted)) {
-          data.push({ id: doc.id, ...doc.data() });
-        }
-      });
-      return data;
-    } catch (e) {
-      console.error("Error getting sent group requests: ", e);
-    }
-  }
-
   async getGroups(uid) {
     try {
       const joinedGroups = await getDocs(
