@@ -15,7 +15,11 @@ export default function Navbar() {
 
   return (
     <nav>
-      <div className={`font-bold  ${isVisible ? "bg-white" : ""}`}>
+      <div
+        className={`font-bold  ${
+          isVisible ? "bg-white" : ""
+        } transition-colors delay-duration-500 duration-500 ease-in-out`}
+      >
         <div className=" flex h-10 items-center justify-between mx-2 my-1">
           <div className="flex-none">
             <Link href="/" legacyBehavior>
