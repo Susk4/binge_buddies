@@ -49,10 +49,11 @@ export default function Navbar() {
             </button>
           </div>
         </div>
+
         <div
           className={` ${
             isVisible ? "h-full" : "h-0"
-          } md:h-0 bg-white overflow-hidden absolute w-full z-10  transition-all duration-500 ease-in-out `}
+          } md:h-0 bg-white overflow-hidden absolute w-full z-10 top-11  transition-all duration-500 ease-in-out `}
         >
           <MobileNavItems logout={logout} setIsVisible={setIsVisible} />
         </div>
