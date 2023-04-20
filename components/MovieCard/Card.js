@@ -35,6 +35,10 @@ const Card = ({ children, style, onVote, id, ...props }) => {
   const getTrajectory = () => {
     setOffset(x.get());
     setDirection(getDirection());
+    const opacity =
+      Math.abs(x.get()) /
+      cardElem.current.parentNode.getBoundingClientRect().width;
+    cardElem.current.style.opacity = 1 - opacity;
   };
 
   const flyAway = (min) => {
@@ -70,6 +74,7 @@ const Card = ({ children, style, onVote, id, ...props }) => {
     if (props.drag) {
       await controls.start({
         x: cardElem.current.parentNode.getBoundingClientRect().width / 2,
+        opacity: 0,
       });
       onVote(true);
     }
@@ -78,6 +83,7 @@ const Card = ({ children, style, onVote, id, ...props }) => {
     if (props.drag) {
       await controls.start({
         x: (-1 * cardElem.current.parentNode.getBoundingClientRect().width) / 2,
+        opacity: 0,
       });
       onVote(false);
     }
