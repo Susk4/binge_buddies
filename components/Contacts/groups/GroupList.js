@@ -4,7 +4,7 @@ import PendingGroupCard from "./PendingGroupCard";
 import useFireStore from "../../../src/hook/useFireStore";
 import Loading from "../../misc/Loading";
 
-const GroupList = ({ user }) => {
+const GroupList = ({ user, refetch, setRefetch }) => {
   const uid = user.uid;
   const {
     getAllPendingGroups,
@@ -26,6 +26,13 @@ const GroupList = ({ user }) => {
   }, [getAllPendingGroups, getGroups, uid]);
 
   useEffect(() => {
+    if (refetch) {
+      fetchGroupList();
+      setRefetch(false);
+    }
+  }, [refetch]);
+
+  useEffect(() => {
     fetchGroupList();
   }, []);
 
@@ -44,6 +51,8 @@ const GroupList = ({ user }) => {
     },
     [declineGroupRequest, fetchGroupList, uid]
   );
+
+  
 
   if (loading) {
     return (

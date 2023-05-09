@@ -5,7 +5,7 @@ import useFireStore from "../../../src/hook/useFireStore";
 import FriendListGroup from "./FriendListGroup";
 import Loading from "../../misc/Loading";
 
-const FriendList = ({ user }) => {
+const FriendList = ({ user, refetch, setRefetch }) => {
   const uid = useMemo(() => user.uid, [user]);
   const {
     getContacts,
@@ -33,8 +33,17 @@ const FriendList = ({ user }) => {
   };
 
   useEffect(() => {
+    if (refetch) {
+      fetchGroupList();
+      setRefetch(false);
+    }
+  }, [refetch]);
+
+  useEffect(() => {
     fetchFriendsList();
   }, []);
+
+  
 
   const handleAccept = async (contact) => {
     await acceptContactRequest(contact);

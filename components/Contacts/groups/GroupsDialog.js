@@ -3,7 +3,7 @@ import BingeDialog from "../../misc/BingeDialog";
 import BingeSelect from "../../misc/BingeSelect";
 import useFireStore from "../../../src/hook/useFireStore";
 
-const GroupsDialog = ({ isOpen, setIsOpen, user }) => {
+const GroupsDialog = ({ isOpen, setIsOpen, user, setRefetch }) => {
   const [selectedUsers, setSelectedUsers] = useState(null);
   const [groupName, setGroupName] = useState("");
   const [groupDescription, setGroupDescription] = useState("");
@@ -43,6 +43,7 @@ const GroupsDialog = ({ isOpen, setIsOpen, user }) => {
           return;
         }
         setIsOpen(false);
+        setRefetch(true);
       });
     }
   }, [

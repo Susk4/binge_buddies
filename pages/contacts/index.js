@@ -11,6 +11,7 @@ function Groups({ auth }) {
   const { user } = auth;
   const [tab, setTab] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [refetch, setRefetch] = useState(false);
 
   return (
     <div
@@ -19,7 +20,11 @@ function Groups({ auth }) {
       <ContactsTabs tab={tab} setTab={setTab} />
 
       <div className="p-2 flex-grow flex-shrink basis-0 min-h-0 overflow-auto">
-        {tab === 0 ? <GroupList user={user} /> : <FriendList user={user} />}
+        {tab === 0 ? (
+          <GroupList user={user} refetch={refetch} setRefetch={setRefetch} />
+        ) : (
+          <FriendList user={user} refetch={refetch} setRefetch={setRefetch} />
+        )}
       </div>
 
       {tab === 0 ? (
@@ -29,7 +34,12 @@ function Groups({ auth }) {
             onClick={() => setIsOpen((prev) => !prev)}
           />
           {isOpen && (
-            <GroupsDialog isOpen={isOpen} setIsOpen={setIsOpen} user={user} />
+            <GroupsDialog
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              user={user}
+              setRefetch={setRefetch}
+            />
           )}
         </>
       ) : (
@@ -39,7 +49,12 @@ function Groups({ auth }) {
             onClick={() => setIsOpen((prev) => !prev)}
           />
           {isOpen && (
-            <FriendsDialog isOpen={isOpen} setIsOpen={setIsOpen} user={user} />
+            <FriendsDialog
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              user={user}
+              setRefetch={setRefetch}
+            />
           )}
         </>
       )}
