@@ -34,7 +34,7 @@ const FriendList = ({ user, refetch, setRefetch }) => {
 
   useEffect(() => {
     if (refetch) {
-      fetchGroupList();
+      fetchFriendsList();
       setRefetch(false);
     }
   }, [refetch]);

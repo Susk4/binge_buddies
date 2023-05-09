@@ -11,19 +11,21 @@ const GroupList = ({ user, refetch, setRefetch }) => {
     getGroups,
     acceptGroupRequest,
     declineGroupRequest,
+    deleteGroup,
+    leaveGroup,
     loading,
   } = useFireStore();
   const [groups, setGroups] = useState([]);
   const [pendingGroups, setPendingGroups] = useState([]);
 
-  const fetchGroupList = useCallback(() => {
+  const fetchGroupList = () => {
     getGroups(uid).then((data) => {
       setGroups(data);
     });
     getAllPendingGroups(uid).then((data) => {
       setPendingGroups(data);
     });
-  }, [getAllPendingGroups, getGroups, uid]);
+  };
 
   useEffect(() => {
     if (refetch) {
@@ -52,7 +54,23 @@ const GroupList = ({ user, refetch, setRefetch }) => {
     [declineGroupRequest, fetchGroupList, uid]
   );
 
-  
+  const removeGroupFromState = (id) => {
+    setGroups((prev) => prev.filter((group) => group.id !== id));
+  };
+  const removePendingGroupFromState = (id) => {
+    setPendingGroups((prev) => prev.filter((group) => group.id !== id));
+  };
+
+  const handleGroupDelete = (id) => {
+    deleteGroup(id, uid);
+    removeGroupFromState(id);
+    removePendingGroupFromState(id);
+  };
+  const handdleGroupLeave = (id) => {
+    leaveGroup(id, uid);
+    removeGroupFromState(id);
+    removePendingGroupFromState(id);
+  };
 
   if (loading) {
     return (
@@ -75,7 +93,13 @@ const GroupList = ({ user, refetch, setRefetch }) => {
         <>
           <h2 className="text-xl font-bold text-center">Groups</h2>
           {groups.map((group) => (
-            <GroupCard group={group} key={group.id} refetch={fetchGroupList} />
+            <GroupCard
+              group={group}
+              key={group.id}
+              refetch={fetchGroupList}
+              groupDelete={handleGroupDelete}
+              groupLeave={handdleGroupLeave}
+            />
           ))}
         </>
       )}
@@ -91,6 +115,8 @@ const GroupList = ({ user, refetch, setRefetch }) => {
               accept={() => handleAccept(group.id)}
               decline={() => handleDecline(group.id)}
               refetch={fetchGroupList}
+              groupDelete={handleGroupDelete}
+              groupLeave={handdleGroupLeave}
             />
           ))}
         </>

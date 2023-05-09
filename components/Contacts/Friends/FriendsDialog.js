@@ -3,7 +3,7 @@ import BingeSelect from "../../misc/BingeSelect";
 import { useEffect, useState } from "react";
 import useFireStore from "../../../src/hook/useFireStore";
 
-const FriendsDialog = ({ isOpen, setIsOpen, user }) => {
+const FriendsDialog = ({ isOpen, setIsOpen, user, setRefetch }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [users, setUsers] = useState([]);
   const [error, setError] = useState(null);
@@ -26,6 +26,7 @@ const FriendsDialog = ({ isOpen, setIsOpen, user }) => {
     } else {
       await sendContactRequest(user.uid, selectedUser?.id);
       setIsOpen(false);
+      setRefetch(true);
     }
   };
 

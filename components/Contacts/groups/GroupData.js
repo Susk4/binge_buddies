@@ -7,8 +7,8 @@ import useFireStore from "../../../src/hook/useFireStore";
 import { IoLogOutOutline } from "react-icons/io5";
 import BingeDialog from "../../misc/BingeDialog";
 
-const GroupData = ({ group, refetch }) => {
-  const { deleteGroup, leaveGroup, loading } = useFireStore();
+const GroupData = ({ group, groupDelete, groupLeave }) => {
+  const { loading } = useFireStore();
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(null);
@@ -17,14 +17,6 @@ const GroupData = ({ group, refetch }) => {
     description: "",
     callback: null,
   });
-  const handleGroupDelete = () => {
-    deleteGroup(group.id, user.uid);
-    refetch();
-  };
-  const handdleGroupLeave = () => {
-    leaveGroup(group.id, user.uid);
-    refetch();
-  };
 
   return (
     <>
@@ -37,7 +29,7 @@ const GroupData = ({ group, refetch }) => {
               const data = {
                 title: "Delete Group",
                 description: "Are you sure you want to delete this group?",
-                callback: handleGroupDelete,
+                callback: () => groupDelete(group.id),
               };
               setDialogData(data);
               setIsOpen(true);
@@ -54,7 +46,7 @@ const GroupData = ({ group, refetch }) => {
               const data = {
                 title: "Leave Group",
                 description: "Are you sure you want to leave this group?",
-                callback: handdleGroupLeave,
+                callback: () => groupLeave(group.id),
               };
               setDialogData(data);
               setIsOpen(true);
