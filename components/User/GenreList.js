@@ -1,63 +1,51 @@
 import useTmdb from "../../src/hook/useTmdb";
-import { useState, useEffect } from "react";
-import { FilterContext } from "../../src/hook/useFilter";
+import { useState, useEffect, useMemo } from "react";
+import { GenreContext } from "../../src/hook/useFilter";
 import { useContext } from "react";
-import OptionsWrapper from "./OptionsWrapper";
+
 import UserFilterRowWrapper from "./UserFilterRowWrapper";
+import BingeSelect from "../misc/BingeSelect";
 
 const GenreList = () => {
-    const { userFilter, setUserFilter, updating, setUpdating } =
-        useContext(FilterContext);
+  const { genres, setGenres } = useContext(GenreContext);
 
-    const { getGenres } = useTmdb();
-    const [genres, setGenres] = useState([]);
+  const { getGenres } = useTmdb();
+  const [genreList, setGenreList] = useState([]);
 
-    useEffect(() => {
-        getGenres().then((data) => {
-            setGenres(data.genres);
-        });
-    }, []);
+  useEffect(() => {
+    getGenres().then((data) => {
+      setGenreList(
+        data.genres.map(({ name, id }) => ({
+          value: id,
+          label: name,
+        }))
+      );
+    });
+  }, []);
 
-    const handleGenreChange = (id) => {
-        setUpdating(true);
-        if (userFilter.genres?.some((ug) => ug == id)) {
-            setUserFilter({
-                ...userFilter,
-                genres: userFilter.genres.filter((ug) => ug != id),
-            });
-        } else {
-            setUserFilter({
-                ...userFilter,
-                genres: [...(userFilter.genres || []), id],
-            });
-        }
-    };
-    if (!userFilter) return <>Loading...</>;
-    return (
-        <UserFilterRowWrapper title="Genres">
-            <OptionsWrapper>
-                {genres.map(({ name, id }) => (
-                    <div key={id} className="gap-1 flex">
-                        <input
-                            type="checkbox"
-                            id={name}
-                            name={name}
-                            value={name}
-                            style={{ accentColor: "#7f1d1d" }}
-                            checked={
-                                userFilter.genres?.some((ug) => ug == id) ||
-                                false
-                            }
-                            onChange={() => handleGenreChange(id)}
-                        />
-                        <label htmlFor={name} className="">
-                            {name}
-                        </label>
-                    </div>
-                ))}
-            </OptionsWrapper>
-        </UserFilterRowWrapper>
-    );
+  const handleGenreChange = (selectedGenres) => {
+    setGenres(selectedGenres.map((genre) => genre.value));
+  };
+  const selectedOptions = useMemo(
+    () =>
+      genreList.filter((genreListItem) =>
+        genres?.some((genre) => genre == genreListItem.value)
+      ),
+    [genres, genreList]
+  );
+  return (
+    <UserFilterRowWrapper title="Genres">
+      <BingeSelect
+        isMulti={true}
+        isSearchable={false}
+        isDisabled={!genres}
+        isLoading={!genres}
+        options={genreList}
+        value={selectedOptions}
+        onChange={handleGenreChange}
+      />
+    </UserFilterRowWrapper>
+  );
 };
 
 export default GenreList;

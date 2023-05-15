@@ -30,7 +30,7 @@ class AuthService {
         };
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
         if (error.code === "auth/account-exists-with-different-credential") {
           return {
             error:

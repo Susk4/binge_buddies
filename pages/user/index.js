@@ -2,23 +2,34 @@ import { withProtected } from "../../src/hook/route";
 import styles from "../../styles/misc/card.module.css";
 import ProfileData from "../../components/User/ProfileData";
 import UserFilter from "../../components/User/UserFilter";
-import { FilterContextProvider } from "../../src/hook/useFilter";
+import Link from "next/link";
+import Loading from "../../components/misc/Loading";
 
 function UserPage({ auth }) {
   const { user } = auth;
 
-  if (!user) return <div>Loading</div>;
+  if (!user)
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
   return (
     <div
-      className={`m-2 p-2 ${styles.card} flex-shrink basis-auto min-h-0 rounded-xl flex flex-col gap-2 overflow-auto`}
+      className={`m-2 p-2 ${styles.card} flex-grow  max-w-lg rounded-xl flex flex-col gap-2 overflow-auto`}
     >
       <ProfileData user={user} />
       <div>
         <hr className="border-gray-400" />
       </div>
-      <FilterContextProvider>
-        <UserFilter user={user} />
-      </FilterContextProvider>
+      <UserFilter user={user} />
+      <div className="flex h-full items-end justify-center">
+        <Link href="/">
+          <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+            Start Exploring Now
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }

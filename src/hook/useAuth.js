@@ -33,22 +33,17 @@ export function AuthProvider(props) {
     setUser(user);
 
     if (additionalUserInfo.isNewUser) {
-      //console.log("user does not exist");
-
       const genresData = await getGenres();
       const genreIds = genresData.genres.map((genre) => genre.id);
 
-      /* const providerData = await getProviders();
-      const providerIds = providerData.results.map((provider) => provider.provider_id);
-       */
       const filterData = {
         genres: genreIds,
         release_year: { from: 1850, to: new Date().getFullYear() },
+        providers: [9, 119, 337, 390, 384, 15, 8],
       };
       await addUser(user, filterData);
       router.push("/user");
     } else {
-      //console.log("user exists");
     }
   };
 

@@ -1,6 +1,5 @@
-import Image from "next/image";
 import UserImage from "../../src/layout/components/UserImage";
-/* import UserStats from "./UserStats"; */
+import UserStats from "./UserStats";
 
 const ProfileData = ({ user }) => {
   return (
@@ -11,8 +10,7 @@ const ProfileData = ({ user }) => {
       <div>
         <h1 className="text-3xl text-center">{user.displayName}</h1>
       </div>
-      <div></div>
-      {/* <UserStats user={user}/> */}
+      <UserStats user={user} />
     </div>
   );
 };

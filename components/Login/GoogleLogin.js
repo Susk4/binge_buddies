@@ -5,7 +5,7 @@ const GoogleLogin = ({ loginWithGoogle }) => {
     <div className="">
       <button
         onClick={loginWithGoogle}
-        className="p-2 rounded bg-red-500 font-medium w-full"
+        className="p-2 rounded-xl bg-red-500 font-medium w-full"
       >
         <LoginButtonLayout text="Login with Google">
           <ImGoogle className="text-2xl" />

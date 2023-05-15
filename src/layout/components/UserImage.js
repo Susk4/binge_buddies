@@ -7,6 +7,7 @@ export default function UserImage({ size }) {
   return (
     <Image
       className=" rounded-full cursor-pointer"
+      alt="User Image"
       src={user.photoURL}
       objectFit="cover"
       width={size}

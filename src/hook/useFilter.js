@@ -4,14 +4,18 @@ import useAuth from "../../src/hook/useAuth";
 import { createContext } from "react";
 
 export const FilterContext = createContext();
+export const GenreContext = createContext();
+export const ProviderContext = createContext();
+export const ReleaseYearContext = createContext();
 
-export function useFilter() {
+export function FilterContextProvider({ children }) {
   const { user } = useAuth();
 
   const { getUserFilter, updateUserFilter } = useFireStore();
 
-  const [userFilter, setUserFilter] = useState(null);
-  const [updating, setUpdating] = useState(false);
+  const [genres, setGenres] = useState(null);
+  const [providers, setProviders] = useState(null);
+  const [release_year, setReleaseYear] = useState(null);
 
   const { minReleaseYear, maxReleaseYear } = {
     minReleaseYear: 1850,
@@ -19,39 +23,35 @@ export function useFilter() {
   };
 
   useEffect(() => {
-    getUserFilter(user.uid).then((data) => {
-      if (data.release_year) {
-        setUserFilter(data);
-      } else {
-        setUserFilter({
-          ...data,
-          release_year: { from: minReleaseYear, to: maxReleaseYear },
-        });
-      }
-    });
-  }, []);
+    if (user) {
+      getUserFilter(user.uid).then((data) => {
+        if (data.release_year) {
+          setGenres(data.genres);
+          setProviders(data.providers);
+          setReleaseYear(data.release_year);
+        } else {
+          setGenres(data.genres);
+          setProviders(data.providers);
+          setReleaseYear({ from: minReleaseYear, to: maxReleaseYear });
+        }
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
-    if (updating) {
-      updateUserFilter(user.uid, userFilter);
-      setUpdating(false);
-    }
-  }, [updating]);
+    if (user && genres && providers && release_year)
+      updateUserFilter(user.uid, { genres, providers, release_year });
+  }, [genres, providers, release_year]);
 
-  return {
-    userFilter,
-    setUserFilter,
-    updating,
-    setUpdating,
-    minReleaseYear,
-    maxReleaseYear,
-  };
-}
-
-export function FilterContextProvider({ children }) {
   return (
-    <FilterContext.Provider value={useFilter()}>
-      {children}
-    </FilterContext.Provider>
+    <ReleaseYearContext.Provider
+      value={{ release_year, setReleaseYear, minReleaseYear, maxReleaseYear }}
+    >
+      <ProviderContext.Provider value={{ providers, setProviders }}>
+        <GenreContext.Provider value={{ genres, setGenres }}>
+          {children}
+        </GenreContext.Provider>
+      </ProviderContext.Provider>
+    </ReleaseYearContext.Provider>
   );
 }
