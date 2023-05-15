@@ -10,7 +10,6 @@ const ProfileData = ({ user }) => {
       <div>
         <h1 className="text-3xl text-center">{user.displayName}</h1>
       </div>
-      <UserStats user={user} />
     </div>
   );
 };
